@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
+    <!-- Критически важно: эти мета-теги должны быть первыми в head для правильной кодировки -->
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ìàéáóòíº Òðàíñïîðòó: Åëåêòðèô³êàö³ÿ òà Àâòîíîìí³ñòü</title>
+    
+    <title>Майбутнє Транспорту: Електрифікація та Автономність</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Добавлен subset=cyrillic для гарантии отображения кириллицы -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&subset=cyrillic,cyrillic-ext,latin&display=swap" rel="stylesheet">
+    
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #F3F4F6; color: #1F2937; }
         .chart-container { 
@@ -41,28 +48,19 @@
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
         }
     </style>
-    <!-- Chosen Palette: "Eco-Tech Harmony" - Warm neutrals (#F3F4F6 background) with Slate (#1F2937 text), Emerald Green for Electric/Eco concepts, and Indigo/Blue for Autonomous/Tech concepts. Subtle amber accents for alerts/ethics. -->
+    <!-- Chosen Palette: "Eco-Tech Harmony" -->
     
     <!-- Application Structure Plan: 
-         1. Header: Simple top navigation to switch between 3 main views: 'Îãëÿä' (Overview), 'Åëåêòðîòðàíñïîðò' (ET), 'Áåçï³ëîòí³ Àâòî' (AT).
-         2. Overview Tab: Dashboard-style summary cards introducing the two pillars (Green Energy vs AI).
-         3. Electric Transport Tab: 
-            - 'Vehicle Showcase': Grid of cards filtering types (Public, Personal, Micro).
-            - 'Eco-Logic': Interactive Chart.js bar chart comparing Efficiency (ICE vs EV) and Line chart for Carbon Debt payback.
-            - 'Battery Lifecycle': A horizontal step-by-step flow (Mining -> Usage -> Recycling) using clickable HTML blocks.
-         4. Autonomous Transport Tab:
-            - 'The Sensor Suite': An interactive visual (CSS abstraction of a car) where users click 'Sensors' (Lidar, Camera) to see their role.
-            - 'Levels of Autonomy': A vertical stepper showing SAE levels 0-5.
-            - 'The Ethics Lab': A simple toggle interaction presenting the "Trolley Problem" logic.
-         Rationale: This structure separates the distinct technological domains while keeping them accessible. The 'Overview' synthesizes them. Interactive charts and diagrams replace dense text to maintain engagement.
+         1. Header: Simple top navigation.
+         2. Overview Tab: Dashboard-style summary.
+         3. Electric Transport Tab: Vehicles, Charts, Lifecycle.
+         4. Autonomous Transport Tab: Sensor Suite, SAE Levels, Ethics.
     -->
 
     <!-- Visualization & Content Choices:
-         1. Efficiency Chart: Goal -> Compare Energy use. Viz -> Bar Chart (Chart.js). Interaction -> Hover for values. Justification -> Clear visual winner for EVs (90% vs 30%).
-         2. Battery Lifecycle: Goal -> Explain complex process. Viz -> Flexbox Step Process (HTML/CSS). Interaction -> Click step to reveal details (Mining/Recycling). Justification -> Linear process fits flow better than a chart.
-         3. Sensor Map: Goal -> Explain AT tech. Viz -> 'Car' div with absolute positioned sensor dots. Interaction -> Hover/Click to update text panel. Justification -> Spatial context helps understand where Lidar/Radar go.
-         4. Ethical Dilemma: Goal -> Engage with philosophy. Viz -> Card with Scenario A/B. Interaction -> Button toggle. Justification -> Makes the abstract 'Trolley Problem' concrete.
-         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+         1. Charts: Chart.js for reliable rendering.
+         2. Diagrams: HTML/CSS based (NO SVG) to prevent rendering issues on old servers.
+         3. Text: Encoded UTF-8.
     -->
 </head>
 <body class="min-h-screen flex flex-col">
@@ -75,9 +73,9 @@
                     <span class="text-xl font-bold text-slate-800 tracking-tight">Future<span class="text-emerald-600">Move</span></span>
                 </div>
                 <div class="flex space-x-1 sm:space-x-8 items-center" id="nav-container">
-                    <button onclick="switchTab('overview')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-emerald-600 bg-emerald-50 transition-colors" data-tab="overview">Îãëÿä</button>
-                    <button onclick="switchTab('electric')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 transition-colors" data-tab="electric">Åëåêòðîòðàíñïîðò</button>
-                    <button onclick="switchTab('autonomous')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors" data-tab="autonomous">Áåçï³ëîòíèêè</button>
+                    <button onclick="switchTab('overview')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-emerald-600 bg-emerald-50 transition-colors" data-tab="overview">Огляд</button>
+                    <button onclick="switchTab('electric')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 transition-colors" data-tab="electric">Електротранспорт</button>
+                    <button onclick="switchTab('autonomous')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors" data-tab="autonomous">Безпілотники</button>
                 </div>
             </div>
         </div>
@@ -89,11 +87,11 @@
         <!-- TAB 1: OVERVIEW -->
         <div id="overview" class="tab-content active">
             <header class="text-center mb-10">
-                <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Ìàéáóòíº Òðàíñïîðòó Âæå Òóò</h1>
+                <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Майбутнє Транспорту Вже Тут</h1>
                 <p class="text-lg text-slate-600 max-w-3xl mx-auto">
-                    Öåé ³íòåðàêòèâíèé çâ³ò äîñë³äæóº äâ³ ðåâîëþö³éí³ ñèëè, ùî çì³íþþòü íàø ñâ³ò: ïåðåõ³ä íà 
-                    <span class="text-emerald-600 font-semibold">åëåêòðè÷íó òÿãó</span> òà âïðîâàäæåííÿ 
-                    <span class="text-indigo-600 font-semibold">øòó÷íîãî ³íòåëåêòó</span> ó êåðóâàííÿ.
+                    Цей інтерактивний звіт досліджує дві революційні сили, що змінюють наш світ: перехід на 
+                    <span class="text-emerald-600 font-semibold">електричну тягу</span> та впровадження 
+                    <span class="text-indigo-600 font-semibold">штучного інтелекту</span> у керування.
                 </p>
             </header>
 
@@ -102,17 +100,17 @@
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer border-t-4 border-emerald-500" onclick="switchTab('electric')">
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-2xl font-bold text-slate-800">Åëåêòðîòðàíñïîðò</h2>
-                            <span class="text-3xl">?</span>
+                            <h2 class="text-2xl font-bold text-slate-800">Електротранспорт</h2>
+                            <span class="text-3xl">⚡</span>
                         </div>
-                        <p class="text-slate-600 mb-4">Â³ä åëåêòðîñàìîêàò³â äî êàð'ºðíèõ ñàìîñêèä³â. Åêîëîã³÷íà àëüòåðíàòèâà, ùî çìåíøóº çàëåæí³ñòü â³ä âèêîïíîãî ïàëèâà òà î÷èùóº ïîâ³òðÿ ì³ñò.</p>
+                        <p class="text-slate-600 mb-4">Від електросамокатів до кар'єрних самоскидів. Екологічна альтернатива, що зменшує залежність від викопного палива та очищує повітря міст.</p>
                         <ul class="space-y-2 text-sm text-slate-500">
-                            <li class="flex items-center"><span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>Íóëüîâ³ âèêèäè â ì³ñò³</li>
-                            <li class="flex items-center"><span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>ÊÊÄ äâèãóíà 90%</li>
-                            <li class="flex items-center"><span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>Åôåêòèâíà óòèë³çàö³ÿ áàòàðåé</li>
+                            <li class="flex items-center"><span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>Нульові викиди в місті</li>
+                            <li class="flex items-center"><span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>ККД двигуна 90%</li>
+                            <li class="flex items-center"><span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>Ефективна утилізація батарей</li>
                         </ul>
                         <div class="mt-6 text-emerald-600 font-semibold flex items-center">
-                            Äîñë³äèòè òåõíîëîã³¿ <span class="ml-2">></span>
+                            Дослідити технології <span class="ml-2">→</span>
                         </div>
                     </div>
                 </div>
@@ -121,40 +119,40 @@
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer border-t-4 border-indigo-500" onclick="switchTab('autonomous')">
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-2xl font-bold text-slate-800">Áåçï³ëîòíèé Òðàíñïîðò</h2>
-                            <span class="text-3xl">??</span>
+                            <h2 class="text-2xl font-bold text-slate-800">Безпілотний Транспорт</h2>
+                            <span class="text-3xl">🤖</span>
                         </div>
-                        <p class="text-slate-600 mb-4">Àâòîìîá³ë³, ùî áà÷àòü á³ëüøå çà ëþäèíó. Ïîºäíàííÿ Lidar, ðàäàð³â òà Ø² äëÿ ñòâîðåííÿ áåçïå÷í³øîãî ìàéáóòíüîãî áåç àâàð³é.</p>
+                        <p class="text-slate-600 mb-4">Автомобілі, що бачать більше за людину. Поєднання Lidar, радарів та ШІ для створення безпечнішого майбутнього без аварій.</p>
                         <ul class="space-y-2 text-sm text-slate-500">
-                            <li class="flex items-center"><span class="w-2 h-2 bg-indigo-400 rounded-full mr-2"></span>6 ð³âí³â àâòîíîìíîñò³</li>
-                            <li class="flex items-center"><span class="w-2 h-2 bg-indigo-400 rounded-full mr-2"></span>Òåõíîëîã³¿ V2X òà Lidar</li>
-                            <li class="flex items-center"><span class="w-2 h-2 bg-indigo-400 rounded-full mr-2"></span>Âèð³øåííÿ åòè÷íèõ äèëåì</li>
+                            <li class="flex items-center"><span class="w-2 h-2 bg-indigo-400 rounded-full mr-2"></span>6 рівнів автономності</li>
+                            <li class="flex items-center"><span class="w-2 h-2 bg-indigo-400 rounded-full mr-2"></span>Технології V2X та Lidar</li>
+                            <li class="flex items-center"><span class="w-2 h-2 bg-indigo-400 rounded-full mr-2"></span>Вирішення етичних дилем</li>
                         </ul>
                         <div class="mt-6 text-indigo-600 font-semibold flex items-center">
-                            Ä³çíàòèñÿ ïðî Ø²-âîä³¿â <span class="ml-2">></span>
+                            Дізнатися про ШІ-водіїв <span class="ml-2">→</span>
                         </div>
                     </div>
                 </div>
             </div>
             
             <div class="mt-12 bg-white rounded-xl shadow-sm p-6">
-                <h3 class="text-xl font-bold text-slate-800 mb-4">Êëþ÷îâ³ âèñíîâêè çâ³òó</h3>
+                <h3 class="text-xl font-bold text-slate-800 mb-4">Ключові висновки звіту</h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                     <div class="p-4 bg-gray-50 rounded-lg">
                         <div class="text-2xl font-bold text-emerald-600">90%</div>
-                        <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">ÊÊÄ Åëåêòðîäâèãóíà</div>
+                        <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">ККД Електродвигуна</div>
                     </div>
                     <div class="p-4 bg-gray-50 rounded-lg">
                         <div class="text-2xl font-bold text-indigo-600">SAE 0-5</div>
-                        <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">Ð³âí³ Àâòîíîìíîñò³</div>
+                        <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">Рівні Автономності</div>
                     </div>
                     <div class="p-4 bg-gray-50 rounded-lg">
                         <div class="text-2xl font-bold text-amber-500">Li-ion</div>
-                        <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">Îñíîâíà Òåõíîëîã³ÿ</div>
+                        <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">Основна Технологія</div>
                     </div>
                     <div class="p-4 bg-gray-50 rounded-lg">
                         <div class="text-2xl font-bold text-blue-500">V2X</div>
-                        <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">²íôðàñòðóêòóðà</div>
+                        <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">Інфраструктура</div>
                     </div>
                 </div>
             </div>
@@ -163,20 +161,20 @@
         <!-- TAB 2: ELECTRIC TRANSPORT -->
         <div id="electric" class="tab-content">
             <div class="mb-8">
-                <h2 class="text-2xl font-bold text-slate-800 mb-2">Åêîñèñòåìà Åëåêòðîòðàíñïîðòó</h2>
+                <h2 class="text-2xl font-bold text-slate-800 mb-2">Екосистема Електротранспорту</h2>
                 <p class="text-slate-600">
-                    Åëåêòðîòðàíñïîðò  öå íå ëèøå Tesla. Öå ö³ëà åêîñèñòåìà, ùî îõîïëþº âñå: â³ä ñàìîêàòà, íà ÿêîìó âè ¿äåòå äî ìåòðî, äî âåëè÷åçíèõ êàð'ºðíèõ ñàìîñêèä³â. Ãîëîâíà ìåòà  ñòàëèé ðîçâèòîê, çíèæåííÿ øóìó òà åíåðãîåôåêòèâí³ñòü.
+                    Електротранспорт — це не лише Tesla. Це ціла екосистема, що охоплює все: від самоката, на якому ви їдете до метро, до величезних кар'єрних самоскидів. Головна мета — сталий розвиток, зниження шуму та енергоефективність.
                 </p>
             </div>
 
             <!-- Section 1: Types Interactive Grid -->
             <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
-                <h3 class="text-lg font-bold text-slate-700 mb-4">Âèäè Åëåêòðîòðàíñïîðòó</h3>
+                <h3 class="text-lg font-bold text-slate-700 mb-4">Види Електротранспорту</h3>
                 <div class="flex flex-wrap gap-2 mb-4">
-                    <button onclick="filterVehicles('all')" class="vehicle-filter active px-3 py-1 text-xs rounded-full border border-emerald-200 bg-emerald-100 text-emerald-800 hover:bg-emerald-200">Âñ³</button>
-                    <button onclick="filterVehicles('public')" class="vehicle-filter px-3 py-1 text-xs rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100">Ãðîìàäñüêèé/Êîìåðö³éíèé</button>
-                    <button onclick="filterVehicles('personal')" class="vehicle-filter px-3 py-1 text-xs rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100">Îñîáèñòèé</button>
-                    <button onclick="filterVehicles('micro')" class="vehicle-filter px-3 py-1 text-xs rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100">Ç²Ì (Ì³êðîìîá³ëüí³ñòü)</button>
+                    <button onclick="filterVehicles('all')" class="vehicle-filter active px-3 py-1 text-xs rounded-full border border-emerald-200 bg-emerald-100 text-emerald-800 hover:bg-emerald-200">Всі</button>
+                    <button onclick="filterVehicles('public')" class="vehicle-filter px-3 py-1 text-xs rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100">Громадський/Комерційний</button>
+                    <button onclick="filterVehicles('personal')" class="vehicle-filter px-3 py-1 text-xs rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100">Особистий</button>
+                    <button onclick="filterVehicles('micro')" class="vehicle-filter px-3 py-1 text-xs rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100">ЗІМ (Мікромобільність)</button>
                 </div>
                 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="vehicle-grid">
@@ -188,29 +186,29 @@
             <div class="grid md:grid-cols-2 gap-8 mb-8">
                 <!-- Efficiency Chart -->
                 <div class="bg-white p-6 rounded-xl shadow-sm flex flex-col">
-                    <h3 class="text-lg font-bold text-slate-700 mb-2">Åíåðãîåôåêòèâí³ñòü: ÄÂÇ ïðîòè Åëåêòðî</h3>
-                    <p class="text-sm text-slate-500 mb-4">Ñê³ëüêè åíåðã³¿ ïåðåòâîðþºòüñÿ íà ðóõ?</p>
+                    <h3 class="text-lg font-bold text-slate-700 mb-2">Енергоефективність: ДВЗ проти Електро</h3>
+                    <p class="text-sm text-slate-500 mb-4">Скільки енергії перетворюється на рух?</p>
                     <div class="chart-container">
                         <canvas id="efficiencyChart"></canvas>
                     </div>
                     <p class="mt-4 text-sm text-slate-500 italic bg-slate-50 p-2 rounded">
-                        Åëåêòðîäâèãóíè ïåðåòâîðþþòü äî 90% õ³ì³÷íî¿ åíåðã³¿ â ðóõ, òîä³ ÿê ÄÂÇ âòðà÷àþòü á³ëüø³ñòü åíåðã³¿ ó âèãëÿä³ òåïëà.
+                        Електродвигуни перетворюють до 90% хімічної енергії в рух, тоді як ДВЗ втрачають більшість енергії у вигляді тепла.
                     </p>
                 </div>
 
                 <!-- Emissions Context -->
                 <div class="bg-white p-6 rounded-xl shadow-sm">
-                    <h3 class="text-lg font-bold text-slate-700 mb-2">Åêîëîã³÷í³ñòü: "Âóãëåöåâèé áîðã"</h3>
+                    <h3 class="text-lg font-bold text-slate-700 mb-2">Екологічність: "Вуглецевий борг"</h3>
                     <div class="prose prose-sm text-slate-600">
                         <p class="mb-3">
-                            Âèðîáíèöòâî åëåêòðîìîá³ëÿ ñòâîðþº á³ëüøå âèêèä³â CO2 ÷åðåç ñêëàäíèé ïðîöåñ âèãîòîâëåííÿ áàòàðåé. Öå íàçèâàºòüñÿ <strong>"âóãëåöåâèì áîðãîì"</strong>.
+                            Виробництво електромобіля створює більше викидів CO2 через складний процес виготовлення батарей. Це називається <strong>"вуглецевим боргом"</strong>.
                         </p>
                         <p class="mb-3">
-                            Îäíàê, çàâäÿêè â³äñóòíîñò³ âèõëîï³â ï³ä ÷àñ åêñïëóàòàö³¿, åëåêòðîìîá³ëü øâèäêî "â³äïðàöüîâóº" öåé áîðã.
+                            Однак, завдяки відсутності вихлопів під час експлуатації, електромобіль швидко "відпрацьовує" цей борг.
                         </p>
                         <div class="bg-emerald-50 p-3 rounded-lg border-l-4 border-emerald-500">
-                            <h4 class="font-bold text-emerald-800 text-xs uppercase mb-1">Âèñíîâîê çâ³òó</h4>
-                            <p class="text-sm">Âóãëåöåâèé ñë³ä åëåêòðîìîá³ëÿ ïðîòÿãîì âñüîãî æèòòºâîãî öèêëó <strong>çàâæäè íèæ÷èé</strong>, í³æ ó àâòî ç ÄÂÇ, íàâ³òü ïðè çàðÿäö³ â³ä "áðóäíî¿" ìåðåæ³.</p>
+                            <h4 class="font-bold text-emerald-800 text-xs uppercase mb-1">Висновок звіту</h4>
+                            <p class="text-sm">Вуглецевий слід електромобіля протягом всього життєвого циклу <strong>завжди нижчий</strong>, ніж у авто з ДВЗ, навіть при зарядці від "брудної" мережі.</p>
                         </div>
                     </div>
                 </div>
@@ -218,8 +216,8 @@
 
             <!-- Section 3: Battery Lifecycle -->
             <div class="bg-white p-6 rounded-xl shadow-sm">
-                <h3 class="text-lg font-bold text-slate-700 mb-4">Æèòòºâèé öèêë Áàòàðå¿: Â³ä ðóäè äî ïåðåðîáêè</h3>
-                <p class="text-sm text-slate-500 mb-6">Íàòèñí³òü íà åòàïè, ùîá ä³çíàòèñÿ ïðî òåõíîëîã³¿ âèäîáóòêó òà óòèë³çàö³¿.</p>
+                <h3 class="text-lg font-bold text-slate-700 mb-4">Життєвий цикл Батареї: Від руди до переробки</h3>
+                <p class="text-sm text-slate-500 mb-6">Натисніть на етапи, щоб дізнатися про технології видобутку та утилізації.</p>
                 
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4 relative">
                     <!-- Connecting line (desktop) -->
@@ -228,31 +226,31 @@
                     <!-- Step 1 -->
                     <div class="relative z-10 flex flex-col items-center cursor-pointer group w-full md:w-1/4" onclick="showBatteryDetail('mining')">
                         <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-xl border-4 border-white shadow-sm group-hover:scale-110 transition-transform">1</div>
-                        <span class="mt-2 font-medium text-slate-700 text-sm">Ñèðîâèíà</span>
+                        <span class="mt-2 font-medium text-slate-700 text-sm">Сировина</span>
                     </div>
 
                     <!-- Step 2 -->
                     <div class="relative z-10 flex flex-col items-center cursor-pointer group w-full md:w-1/4" onclick="showBatteryDetail('production')">
                         <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xl border-4 border-white shadow-sm group-hover:scale-110 transition-transform">2</div>
-                        <span class="mt-2 font-medium text-slate-700 text-sm">Âèðîáíèöòâî</span>
+                        <span class="mt-2 font-medium text-slate-700 text-sm">Виробництво</span>
                     </div>
 
                     <!-- Step 3 -->
                     <div class="relative z-10 flex flex-col items-center cursor-pointer group w-full md:w-1/4" onclick="showBatteryDetail('usage')">
                         <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xl border-4 border-white shadow-sm group-hover:scale-110 transition-transform">3</div>
-                        <span class="mt-2 font-medium text-slate-700 text-sm">Åêñïëóàòàö³ÿ</span>
+                        <span class="mt-2 font-medium text-slate-700 text-sm">Експлуатація</span>
                     </div>
 
                     <!-- Step 4 -->
                     <div class="relative z-10 flex flex-col items-center cursor-pointer group w-full md:w-1/4" onclick="showBatteryDetail('recycling')">
                         <div class="w-12 h-12 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xl border-4 border-white shadow-sm group-hover:scale-110 transition-transform">4</div>
-                        <span class="mt-2 font-medium text-slate-700 text-sm">Óòèë³çàö³ÿ</span>
+                        <span class="mt-2 font-medium text-slate-700 text-sm">Утилізація</span>
                     </div>
                 </div>
 
                 <div id="battery-detail-panel" class="mt-8 p-4 bg-slate-50 rounded-lg border border-slate-200 min-h-[120px]">
-                    <h4 id="bd-title" class="font-bold text-slate-800 mb-2">Îáåð³òü åòàï âèùå</h4>
-                    <p id="bd-text" class="text-sm text-slate-600">Ä³çíàéòåñÿ äåòàë³ ïðî òåõíîëîã³÷íèé ïðîöåñ ñòâîðåííÿ òà ïåðåðîáêè Li-ion àêóìóëÿòîð³â.</p>
+                    <h4 id="bd-title" class="font-bold text-slate-800 mb-2">Оберіть етап вище</h4>
+                    <p id="bd-text" class="text-sm text-slate-600">Дізнайтеся деталі про технологічний процес створення та переробки Li-ion акумуляторів.</p>
                 </div>
             </div>
         </div>
@@ -260,22 +258,22 @@
         <!-- TAB 3: AUTONOMOUS TRANSPORT -->
         <div id="autonomous" class="tab-content">
             <div class="mb-8">
-                <h2 class="text-2xl font-bold text-slate-800 mb-2">Åðà Áåçï³ëîòíèê³â</h2>
+                <h2 class="text-2xl font-bold text-slate-800 mb-2">Ера Безпілотників</h2>
                 <p class="text-slate-600">
-                    Ñàìîêåðîâàíèé òðàíñïîðò âèêîðèñòîâóº ñêëàäíèé êîìïëåêñ äàò÷èê³â òà Ø² äëÿ ïðèéíÿòòÿ ð³øåíü. Ïîêè ìè çíàõîäèìîñÿ íà åòàï³ ÷àñòêîâî¿ àâòîìàòèçàö³¿ (ð³âí³ 2-3), òåõíîëîã³ÿ îá³öÿº êàðäèíàëüíî çíèçèòè àâàð³éí³ñòü.
+                    Самокерований транспорт використовує складний комплекс датчиків та ШІ для прийняття рішень. Поки ми знаходимося на етапі часткової автоматизації (рівні 2-3), технологія обіцяє кардинально знизити аварійність.
                 </p>
             </div>
 
             <div class="grid lg:grid-cols-3 gap-8">
                 <!-- Interactive Car Sensor View -->
                 <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm">
-                    <h3 class="text-lg font-bold text-slate-700 mb-4">ßê áà÷èòü àâòîìîá³ëü?</h3>
-                    <p class="text-sm text-slate-500 mb-6">Íàâåä³òü êóðñîð àáî íàòèñí³òü íà ïóëüñóþ÷³ òî÷êè, ùîá çðîçóì³òè ïðèçíà÷åííÿ ñåíñîð³â.</p>
+                    <h3 class="text-lg font-bold text-slate-700 mb-4">Як бачить автомобіль?</h3>
+                    <p class="text-sm text-slate-500 mb-6">Наведіть курсор або натисніть на пульсуючі точки, щоб зрозуміти призначення сенсорів.</p>
                     
                     <div class="relative bg-slate-100 rounded-xl h-64 w-full flex items-center justify-center overflow-hidden border border-slate-200">
                         <!-- Abstract Car Shape -->
                         <div class="w-48 h-24 bg-indigo-500 rounded-lg relative shadow-lg flex items-center justify-center text-white font-bold opacity-90">
-                            Àâòîíîìíå Àâòî
+                            Автономне Авто
                             <!-- Wheels -->
                             <div class="absolute -bottom-4 left-6 w-10 h-10 bg-slate-800 rounded-full"></div>
                             <div class="absolute -bottom-4 right-6 w-10 h-10 bg-slate-800 rounded-full"></div>
@@ -301,38 +299,38 @@
                     </div>
 
                     <div id="sensor-info" class="mt-4 p-4 bg-indigo-50 border border-indigo-100 rounded-lg">
-                        <h4 class="font-bold text-indigo-900">Íàâåä³òü íà ñåíñîð</h4>
-                        <p class="text-sm text-indigo-700 mt-1">Îáåð³òü åëåìåíò íà ñõåì³, ùîá ä³çíàòèñÿ ïðî éîãî ôóíêö³þ.</p>
+                        <h4 class="font-bold text-indigo-900">Наведіть на сенсор</h4>
+                        <p class="text-sm text-indigo-700 mt-1">Оберіть елемент на схемі, щоб дізнатися про його функцію.</p>
                     </div>
                 </div>
 
                 <!-- Levels of Autonomy -->
                 <div class="bg-white p-6 rounded-xl shadow-sm">
-                    <h3 class="text-lg font-bold text-slate-700 mb-4">Ð³âí³ Àâòîíîìíîñò³ (SAE)</h3>
+                    <h3 class="text-lg font-bold text-slate-700 mb-4">Рівні Автономності (SAE)</h3>
                     <div class="space-y-3 max-h-[400px] overflow-y-auto pr-2">
                         <div class="level-card p-3 rounded border border-slate-200 hover:border-indigo-300 cursor-pointer transition-colors" onclick="highlightLevel(this)">
-                            <span class="text-xs font-bold bg-slate-200 px-2 py-0.5 rounded text-slate-700">Ð³âåíü 0</span>
-                            <p class="text-sm text-slate-600 mt-1">Ïîâíå ðó÷íå êåðóâàííÿ.</p>
+                            <span class="text-xs font-bold bg-slate-200 px-2 py-0.5 rounded text-slate-700">Рівень 0</span>
+                            <p class="text-sm text-slate-600 mt-1">Повне ручне керування.</p>
                         </div>
                         <div class="level-card p-3 rounded border border-slate-200 hover:border-indigo-300 cursor-pointer transition-colors" onclick="highlightLevel(this)">
-                            <span class="text-xs font-bold bg-slate-200 px-2 py-0.5 rounded text-slate-700">Ð³âåíü 1</span>
-                            <p class="text-sm text-slate-600 mt-1">Äîïîìîãà âîä³þ (Êðó¿ç-êîíòðîëü).</p>
+                            <span class="text-xs font-bold bg-slate-200 px-2 py-0.5 rounded text-slate-700">Рівень 1</span>
+                            <p class="text-sm text-slate-600 mt-1">Допомога водію (Круїз-контроль).</p>
                         </div>
                         <div class="level-card p-3 rounded border-l-4 border-l-indigo-500 bg-indigo-50 border-slate-200 cursor-pointer transition-colors" onclick="highlightLevel(this)">
-                            <span class="text-xs font-bold bg-indigo-200 px-2 py-0.5 rounded text-indigo-800">Ð³âåíü 2 (Çàðàç)</span>
-                            <p class="text-sm text-slate-600 mt-1">×àñòêîâà àâòîìàòèçàö³ÿ. Âîä³é êîíòðîëþº âñå.</p>
+                            <span class="text-xs font-bold bg-indigo-200 px-2 py-0.5 rounded text-indigo-800">Рівень 2 (Зараз)</span>
+                            <p class="text-sm text-slate-600 mt-1">Часткова автоматизація. Водій контролює все.</p>
                         </div>
                         <div class="level-card p-3 rounded border border-slate-200 hover:border-indigo-300 cursor-pointer transition-colors" onclick="highlightLevel(this)">
-                            <span class="text-xs font-bold bg-slate-200 px-2 py-0.5 rounded text-slate-700">Ð³âåíü 3</span>
-                            <p class="text-sm text-slate-600 mt-1">Óìîâíà àâòîìàòèçàö³ÿ. Âîä³é ìàº áóòè ãîòîâèé ïåðåõîïèòè êåðìî.</p>
+                            <span class="text-xs font-bold bg-slate-200 px-2 py-0.5 rounded text-slate-700">Рівень 3</span>
+                            <p class="text-sm text-slate-600 mt-1">Умовна автоматизація. Водій має бути готовий перехопити кермо.</p>
                         </div>
                         <div class="level-card p-3 rounded border border-slate-200 hover:border-indigo-300 cursor-pointer transition-colors" onclick="highlightLevel(this)">
-                            <span class="text-xs font-bold bg-slate-200 px-2 py-0.5 rounded text-slate-700">Ð³âåíü 4</span>
-                            <p class="text-sm text-slate-600 mt-1">Âèñîêà àâòîìàòèçàö³ÿ. Àâòî ¿äå ñàìå â ïåâíèõ çîíàõ.</p>
+                            <span class="text-xs font-bold bg-slate-200 px-2 py-0.5 rounded text-slate-700">Рівень 4</span>
+                            <p class="text-sm text-slate-600 mt-1">Висока автоматизація. Авто їде саме в певних зонах.</p>
                         </div>
                         <div class="level-card p-3 rounded border border-slate-200 hover:border-indigo-300 cursor-pointer transition-colors" onclick="highlightLevel(this)">
-                            <span class="text-xs font-bold bg-slate-200 px-2 py-0.5 rounded text-slate-700">Ð³âåíü 5</span>
-                            <p class="text-sm text-slate-600 mt-1">Ïîâíà àâòîìàòèçàö³ÿ. Êåðìî íå ïîòð³áíå.</p>
+                            <span class="text-xs font-bold bg-slate-200 px-2 py-0.5 rounded text-slate-700">Рівень 5</span>
+                            <p class="text-sm text-slate-600 mt-1">Повна автоматизація. Кермо не потрібне.</p>
                         </div>
                     </div>
                 </div>
@@ -342,40 +340,40 @@
             <div class="mt-8 bg-white p-6 rounded-xl shadow-sm border-t-4 border-amber-400">
                 <div class="flex flex-col md:flex-row gap-6">
                     <div class="md:w-1/2">
-                        <h3 class="text-lg font-bold text-slate-700 mb-2">Åòèêà: Ïðîáëåìà Âàãîíåòêè</h3>
+                        <h3 class="text-lg font-bold text-slate-700 mb-2">Етика: Проблема Вагонетки</h3>
                         <p class="text-sm text-slate-600 mb-4">
-                            Íàéñêëàäí³øå ïèòàííÿ äëÿ Ø²  öå íå "ÿê ¿õàòè", à "êîãî ðÿòóâàòè" ó íåìèíó÷³é àâàð³¿. Åòè÷í³ ðåêîìåíäàö³¿ ñõèëÿþòüñÿ äî ì³í³ì³çàö³¿ æåðòâ, àëå ÿê öå çàêîäóâàòè?
+                            Найскладніше питання для ШІ — це не "як їхати", а "кого рятувати" у неминучій аварії. Етичні рекомендації схиляються до мінімізації жертв, але як це закодувати?
                         </p>
                         <div class="bg-amber-50 p-4 rounded-lg">
-                            <p class="font-bold text-amber-800 mb-2">Äèëåìà:</p>
-                            <p class="text-sm text-amber-900 mb-3">Íà äîðîç³ 5 ï³øîõîä³â. Â³äìîâà ãàëüì. Ïîâåðíóòè â ñò³íó (çàãèíå ïàñàæèð) ÷è ¿õàòè ïðÿìî (çàãèíóòü ï³øîõîäè)?</p>
+                            <p class="font-bold text-amber-800 mb-2">Дилема:</p>
+                            <p class="text-sm text-amber-900 mb-3">На дорозі 5 пішоходів. Відмова гальм. Повернути в стіну (загине пасажир) чи їхати прямо (загинуть пішоходи)?</p>
                             <div class="flex gap-2">
-                                <button onclick="resolveEthics('utilitarian')" class="px-3 py-1 bg-white border border-amber-300 text-amber-800 text-xs rounded hover:bg-amber-100">Ì³í³ì³çóâàòè æåðòâè</button>
-                                <button onclick="resolveEthics('passenger')" class="px-3 py-1 bg-white border border-amber-300 text-amber-800 text-xs rounded hover:bg-amber-100">Çàõèñòèòè ïàñàæèðà</button>
+                                <button onclick="resolveEthics('utilitarian')" class="px-3 py-1 bg-white border border-amber-300 text-amber-800 text-xs rounded hover:bg-amber-100">Мінімізувати жертви</button>
+                                <button onclick="resolveEthics('passenger')" class="px-3 py-1 bg-white border border-amber-300 text-amber-800 text-xs rounded hover:bg-amber-100">Захистити пасажира</button>
                             </div>
                             <p id="ethics-result" class="text-xs mt-3 text-slate-500 font-style: italic min-h-[40px]"></p>
                         </div>
                     </div>
                     <div class="md:w-1/2">
-                        <h3 class="text-lg font-bold text-slate-700 mb-2">²íôðàñòðóêòóðà òà Áåçïåêà</h3>
+                        <h3 class="text-lg font-bold text-slate-700 mb-2">Інфраструктура та Безпека</h3>
                         <div class="space-y-2">
                             <details class="group p-2 border border-slate-200 rounded cursor-pointer open:bg-slate-50">
                                 <summary class="text-sm font-semibold text-slate-700 list-none flex justify-between">
-                                    Áåçïåêà (Ïëþñè òà Ì³íóñè)
-                                    <span class="text-indigo-500 group-open:rotate-180 transition-transform">¡</span>
+                                    Безпека (Плюси та Мінуси)
+                                    <span class="text-indigo-500 group-open:rotate-180 transition-transform">▼</span>
                                 </summary>
                                 <div class="text-xs text-slate-600 mt-2 pl-2 border-l-2 border-indigo-200">
-                                    <p class="mb-1"><strong>+</strong> Óñóíåííÿ 90% àâàð³é ÷åðåç ëþäñüêèé ôàêòîð (âòîìà, àëêîãîëü).</p>
-                                    <p><strong>-</strong> Ðèçèê ê³áåðàòàê òà ïîìèëîê ó "íåñòàíäàðòíèõ" ñèòóàö³ÿõ (Corner cases).</p>
+                                    <p class="mb-1"><strong>+</strong> Усунення 90% аварій через людський фактор (втома, алкоголь).</p>
+                                    <p><strong>-</strong> Ризик кібератак та помилок у "нестандартних" ситуаціях (Corner cases).</p>
                                 </div>
                             </details>
                             <details class="group p-2 border border-slate-200 rounded cursor-pointer open:bg-slate-50">
                                 <summary class="text-sm font-semibold text-slate-700 list-none flex justify-between">
-                                    Ïîòðåáè ²íôðàñòðóêòóðè
-                                    <span class="text-indigo-500 group-open:rotate-180 transition-transform">¡</span>
+                                    Потреби Інфраструктури
+                                    <span class="text-indigo-500 group-open:rotate-180 transition-transform">▼</span>
                                 </summary>
                                 <div class="text-xs text-slate-600 mt-2 pl-2 border-l-2 border-indigo-200">
-                                    <p>Äëÿ ïîâíî¿ àâòîíîì³¿ ïîòð³áí³ V2I çâ'ÿçîê (äîðîãà "ãîâîðèòü" ç àâòî), ³äåàëüíà ðîçì³òêà, HD-êàðòè òà ïðàâîâå ðåãóëþâàííÿ.</p>
+                                    <p>Для повної автономії потрібні V2I зв'язок (дорога "говорить" з авто), ідеальна розмітка, HD-карти та правове регулювання.</p>
                                 </div>
                             </details>
                         </div>
@@ -388,37 +386,37 @@
 
     <footer class="bg-slate-800 text-slate-400 py-6 mt-8">
         <div class="container mx-auto px-4 text-center text-sm">
-            <p>&copy; 2025 Çâ³ò ïðî ìàéáóòíº òðàíñïîðòó. Ñòâîðåíî íà îñíîâ³ íàäàíèõ äàíèõ.</p>
+            <p>&copy; 2025 Звіт про майбутнє транспорту. Створено на основі наданих даних.</p>
         </div>
     </footer>
 
     <script>
         // --- Data Storage ---
         const vehicles = [
-            { type: 'public', name: 'Åëåêòðîáóñ', icon: '??' },
-            { type: 'public', name: 'Ìåòðî / Òðàìâàé', icon: '??' },
-            { type: 'public', name: 'Êàð\'ºðíèé ñàìîñêèä', icon: '??' },
-            { type: 'personal', name: 'Åëåêòðîìîá³ëü (BEV)', icon: '??' },
-            { type: 'personal', name: 'Ã³áðèä (PHEV)', icon: '??' },
-            { type: 'micro', name: 'Åëåêòðîñàìîêàò', icon: '??' },
-            { type: 'micro', name: 'Ìîíîêîëåñî', icon: '??' },
-            { type: 'micro', name: 'Ã³ðîñêóòåð', icon: '??' },
-            { type: 'special', name: 'Äðîí (ÁÏËÀ)', icon: '??' },
-            { type: 'special', name: 'Ãîëüô-êàð', icon: '?' }
+            { type: 'public', name: 'Електробус', icon: '🚌' },
+            { type: 'public', name: 'Метро / Трамвай', icon: '🚋' },
+            { type: 'public', name: 'Кар\'єрний самоскид', icon: '🚛' },
+            { type: 'personal', name: 'Електромобіль (BEV)', icon: '🚗' },
+            { type: 'personal', name: 'Гібрид (PHEV)', icon: '🔋' },
+            { type: 'micro', name: 'Електросамокат', icon: '🛴' },
+            { type: 'micro', name: 'Моноколесо', icon: '🚲' },
+            { type: 'micro', name: 'Гіроскутер', icon: '🛹' },
+            { type: 'special', name: 'Дрон (БПЛА)', icon: '🚁' },
+            { type: 'special', name: 'Гольф-кар', icon: '⛳' }
         ];
 
         const batteryDetails = {
-            mining: { title: "1. Âèäîáóòîê Ñèðîâèíè", text: "Ë³ò³é âèäîáóâàþòü ç ñîëÿíèõ îçåð (âèïàðþâàííÿ) àáî òâåðäèõ ïîð³ä. Êîáàëüò òà í³êåëü  øàõòíèì ìåòîäîì. Öå åíåðãîºìíèé ïðîöåñ ç åêîëîã³÷íèìè ðèçèêàìè." },
-            production: { title: "2. Âèãîòîâëåííÿ", text: "Ñòâîðåííÿ åëåêòðîä³â (êàòîäà òà àíîäà), íàíåñåííÿ ïîêðèòòÿ íà ôîëüãó, çá³ðêà êîì³ðêè â 'ñóõèõ ê³ìíàòàõ' òà çàïîâíåííÿ åëåêòðîë³òîì." },
-            usage: { title: "3. Åêñïëóàòàö³ÿ", text: "Ïåð³îä '÷èñòî¿' ðîáîòè. Â³äñóòí³ñòü âèêèä³â. Ìîæëèâ³ñòü ïîâòîðíîãî âèêîðèñòàííÿ (Second Life) ó ñòàö³îíàðíèõ íàêîïè÷óâà÷àõ ï³ñëÿ çíîñó â àâòî." },
-            recycling: { title: "4. Óòèë³çàö³ÿ", text: "Ã³äðîìåòàëóðã³ÿ (ðîç÷èíåííÿ â êèñëîòàõ, âèñîêèé % â³äíîâëåííÿ) àáî Ï³ðîìåòàëóðã³ÿ (ñïàëþâàííÿ, ìåíø åôåêòèâíî). Êðèòè÷íî âàæëèâî äëÿ ïîâåðíåííÿ ìåòàë³â ó öèêë." }
+            mining: { title: "1. Видобуток Сировини", text: "Літій видобувають з соляних озер (випарювання) або твердих порід. Кобальт та нікель — шахтним методом. Це енергоємний процес з екологічними ризиками." },
+            production: { title: "2. Виготовлення", text: "Створення електродів (катода та анода), нанесення покриття на фольгу, збірка комірки в 'сухих кімнатах' та заповнення електролітом." },
+            usage: { title: "3. Експлуатація", text: "Період 'чистої' роботи. Відсутність викидів. Можливість повторного використання (Second Life) у стаціонарних накопичувачах після зносу в авто." },
+            recycling: { title: "4. Утилізація", text: "Гідрометалургія (розчинення в кислотах, високий % відновлення) або Пірометалургія (спалювання, менш ефективно). Критично важливо для повернення металів у цикл." }
         };
 
         const sensorInfo = {
-            lidar: { title: "Lidar (Ëàçåð)", text: "Ñòâîðþº òî÷íó 3D-êàðòó ñâ³òó íàâêîëî, âèì³ðþþ÷è ÷àñ ïîâåðíåííÿ ëàçåðíèõ ïðîìåí³â. Áà÷èòü ôîðìó îá'ºêò³â." },
-            camera: { title: "Êàìåðè (Ç³ð)", text: "Ðîçï³çíàþòü êîëüîðè, äîðîæí³ çíàêè, ðîçì³òêó òà ñèãíàëè ñâ³òëîôîð³â. ªäèíèé ñåíñîð, ùî '÷èòàº' â³çóàëüíó ³íôîðìàö³þ." },
-            radar: { title: "Ðàäàð", text: "Âèêîðèñòîâóº ðàä³îõâèë³. Âèçíà÷àº øâèäê³ñòü òà äèñòàíö³þ. Ïðàöþº êðàùå çà ³íøèõ ó äîù òà òóìàí." },
-            ultra: { title: "Óëüòðàçâóê", text: "Ñåíñîðè áëèçüêî¿ ä³¿. ²äåàëüí³ äëÿ ïàðêóâàííÿ òà âèÿâëåííÿ îá'ºêò³â ó ñë³ïèõ çîíàõ ïîðó÷ ç àâòî." }
+            lidar: { title: "Lidar (Лазер)", text: "Створює точну 3D-карту світу навколо, вимірюючи час повернення лазерних променів. Бачить форму об'єктів." },
+            camera: { title: "Камери (Зір)", text: "Розпізнають кольори, дорожні знаки, розмітку та сигнали світлофорів. Єдиний сенсор, що 'читає' візуальну інформацію." },
+            radar: { title: "Радар", text: "Використовує радіохвилі. Визначає швидкість та дистанцію. Працює краще за інших у дощ та туман." },
+            ultra: { title: "Ультразвук", text: "Сенсори близької дії. Ідеальні для паркування та виявлення об'єктів у сліпих зонах поруч з авто." }
         };
 
         // --- Navigation Logic ---
@@ -451,10 +449,10 @@
             
             // Update filter buttons styles
             document.querySelectorAll('.vehicle-filter').forEach(btn => {
-                if ((category === 'all' && btn.innerText === 'Âñ³') || 
-                    (category === 'public' && btn.innerText.includes('Ãðîìàäñüêèé')) ||
-                    (category === 'personal' && btn.innerText.includes('Îñîáèñòèé')) ||
-                    (category === 'micro' && btn.innerText.includes('Ç²Ì'))) {
+                if ((category === 'all' && btn.innerText === 'Всі') || 
+                    (category === 'public' && btn.innerText.includes('Громадський')) ||
+                    (category === 'personal' && btn.innerText.includes('Особистий')) ||
+                    (category === 'micro' && btn.innerText.includes('ЗІМ'))) {
                     btn.classList.add('bg-emerald-100', 'text-emerald-800', 'border-emerald-200');
                     btn.classList.remove('text-slate-600', 'border-slate-200');
                 } else {
@@ -508,9 +506,9 @@
         function resolveEthics(choice) {
             const resBox = document.getElementById('ethics-result');
             if (choice === 'utilitarian') {
-                resBox.innerHTML = "<strong>Âèá³ð óòèë³òàðèçìó:</strong> Ø² æåðòâóº ïàñàæèðîì çàðàäè ïîðÿòóíêó 5 æèòò³â. Öå ì³í³ì³çóº çàãàëüíó øêîäó, àëå õòî êóïèòü àâòî, ùî ìîæå âáèòè âëàñíèêà?";
+                resBox.innerHTML = "<strong>Вибір утилітаризму:</strong> ШІ жертвує пасажиром заради порятунку 5 життів. Це мінімізує загальну шкоду, але хто купить авто, що може вбити власника?";
             } else {
-                resBox.innerHTML = "<strong>Çàõèñò ïàñàæèðà:</strong> Àâòî ðÿòóº âàñ, àëå ãèíå 5 ëþäåé. Öå ïðîäàºòüñÿ êðàùå, àëå ñóñï³ëüñòâî ìîæå íå ïðèéíÿòè òàêèõ åãî¿ñòè÷íèõ ìàøèí.";
+                resBox.innerHTML = "<strong>Захист пасажира:</strong> Авто рятує вас, але гине 5 людей. Це продається краще, але суспільство може не прийняти таких егоїстичних машин.";
             }
         }
 
@@ -525,9 +523,9 @@
             new Chart(ctxEfficiency, {
                 type: 'bar',
                 data: {
-                    labels: ['Äâèãóí Âíóòð³øíüîãî Çãîðÿííÿ (ÄÂÇ)', 'Åëåêòðîäâèãóí (EV)'],
+                    labels: ['Двигун Внутрішнього Згоряння (ДВЗ)', 'Електродвигун (EV)'],
                     datasets: [{
-                        label: 'Êîåô³ö³ºíò Êîðèñíî¿ Ä³¿ (%)',
+                        label: 'Коефіцієнт Корисної Дії (%)',
                         data: [30, 90],
                         backgroundColor: ['#94a3b8', '#10b981'],
                         borderRadius: 6,
@@ -542,7 +540,7 @@
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    return context.raw + '% åíåðã³¿ éäå íà ðóõ';
+                                    return context.raw + '% енергії йде на рух';
                                 }
                             }
                         }
@@ -551,7 +549,7 @@
                         y: {
                             beginAtZero: true,
                             max: 100,
-                            title: { display: true, text: 'Åôåêòèâí³ñòü (%)' }
+                            title: { display: true, text: 'Ефективність (%)' }
                         }
                     }
                 }
