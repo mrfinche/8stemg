@@ -3,416 +3,569 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>?? ЕЛЕКТРОТРАНСПОРТ: ШВИДКИЙ ГАЙД ??</title>
+    <title>РњР°Р№Р±СѓС‚РЅС” РўСЂР°РЅСЃРїРѕСЂС‚Сѓ: Р•Р»РµРєС‚СЂРёС„С–РєР°С†С–СЏ С‚Р° РђРІС‚РѕРЅРѕРјРЅС–СЃС‚СЊ</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #121212;
-            color: #E0E0E0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        body { font-family: 'Inter', sans-serif; background-color: #F3F4F6; color: #1F2937; }
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 600px; 
+            margin: 0 auto; 
+            height: 300px; 
+            max-height: 400px; 
         }
-        #app {
-            width: 100%;
-            max-width: 450px; /* Typical phone screen width */
-            height: 100vh;
-            max-height: 850px; /* Optimized height for preview */
-            position: relative;
-            background-color: #000000;
-            overflow: hidden;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+        
+        .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .sensor-point {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            animation: pulse-blue 2s infinite;
         }
-        .slide {
-            flex-grow: 1;
-            padding: 2rem 1.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            overflow-y: auto;
-            opacity: 0;
-            transform: translateY(100%);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-        .slide.active {
-            opacity: 1;
-            transform: translateY(0);
-            position: relative;
-        }
-        .slide-content h2 {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: #4ade80; /* Tailwind green-400 */
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-        }
-        .slide-content h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #93c5fd; /* Tailwind blue-300 */
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
-        }
-        .slide-content p, .slide-content ul, .slide-content table {
-            font-size: 1rem;
-            line-height: 1.5;
-            margin-bottom: 1rem;
-        }
-        .slide-content ul {
-            padding-left: 1.5rem;
-            list-style: none;
-        }
-        .slide-content li {
-            position: relative;
-            margin-bottom: 0.5rem;
-            padding-left: 1rem;
-        }
-        .slide-content li::before {
-            content: '??';
-            position: absolute;
-            left: -0.5rem;
-            top: 0;
-        }
-        .slide-content strong {
-            color: #fcd34d; /* Tailwind amber-300 */
-        }
-        .progress-bar-container {
-            display: flex;
-            gap: 4px;
-            padding: 8px 16px 0;
-            width: 100%;
-        }
-        .progress-bar {
-            flex-grow: 1;
-            height: 4px;
-            background-color: rgba(255, 255, 255, 0.3);
-            border-radius: 2px;
-        }
-        .progress-segment {
-            height: 100%;
-            background-color: #4ade80;
-            width: 0;
-            transition: width 0.3s ease-in-out;
-        }
-        .buttons-container {
-            display: flex;
-            justify-content: space-between;
-            padding: 0 1.5rem 1.5rem;
-        }
-        .nav-button {
-            background-color: #262626;
-            color: #E0E0E0;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: background-color 0.2s;
-            box-shadow: 0 4px #1c1c1c;
-        }
-        .nav-button:hover {
-            background-color: #363636;
-        }
-        .nav-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        /* Custom table styling for Slide 7 */
-        .slide-content table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        .slide-content th, .slide-content td {
-            padding: 0.5rem;
-            border: 1px solid #363636;
-            text-align: left;
-            font-size: 0.9rem;
-        }
-        .slide-content th {
-            background-color: #262626;
-            color: #4ade80;
+        @keyframes pulse-blue {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
         }
     </style>
+    <!-- Chosen Palette: "Eco-Tech Harmony" - Warm neutrals (#F3F4F6 background) with Slate (#1F2937 text), Emerald Green for Electric/Eco concepts, and Indigo/Blue for Autonomous/Tech concepts. Subtle amber accents for alerts/ethics. -->
+    
+    <!-- Application Structure Plan: 
+         1. Header: Simple top navigation to switch between 3 main views: 'РћРіР»СЏРґ' (Overview), 'Р•Р»РµРєС‚СЂРѕС‚СЂР°РЅСЃРїРѕСЂС‚' (ET), 'Р‘РµР·РїС–Р»РѕС‚РЅС– РђРІС‚Рѕ' (AT).
+         2. Overview Tab: Dashboard-style summary cards introducing the two pillars (Green Energy vs AI).
+         3. Electric Transport Tab: 
+            - 'Vehicle Showcase': Grid of cards filtering types (Public, Personal, Micro).
+            - 'Eco-Logic': Interactive Chart.js bar chart comparing Efficiency (ICE vs EV) and Line chart for Carbon Debt payback.
+            - 'Battery Lifecycle': A horizontal step-by-step flow (Mining -> Usage -> Recycling) using clickable HTML blocks.
+         4. Autonomous Transport Tab:
+            - 'The Sensor Suite': An interactive visual (CSS abstraction of a car) where users click 'Sensors' (Lidar, Camera) to see their role.
+            - 'Levels of Autonomy': A vertical stepper showing SAE levels 0-5.
+            - 'The Ethics Lab': A simple toggle interaction presenting the "Trolley Problem" logic.
+         Rationale: This structure separates the distinct technological domains while keeping them accessible. The 'Overview' synthesizes them. Interactive charts and diagrams replace dense text to maintain engagement.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Efficiency Chart: Goal -> Compare Energy use. Viz -> Bar Chart (Chart.js). Interaction -> Hover for values. Justification -> Clear visual winner for EVs (90% vs 30%).
+         2. Battery Lifecycle: Goal -> Explain complex process. Viz -> Flexbox Step Process (HTML/CSS). Interaction -> Click step to reveal details (Mining/Recycling). Justification -> Linear process fits flow better than a chart.
+         3. Sensor Map: Goal -> Explain AT tech. Viz -> 'Car' div with absolute positioned sensor dots. Interaction -> Hover/Click to update text panel. Justification -> Spatial context helps understand where Lidar/Radar go.
+         4. Ethical Dilemma: Goal -> Engage with philosophy. Viz -> Card with Scenario A/B. Interaction -> Button toggle. Justification -> Makes the abstract 'Trolley Problem' concrete.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
 </head>
-<body>
-    <div id="app">
-        <div id="progress-container" class="progress-bar-container"></div>
-        <div id="slides-container" class="flex-grow overflow-hidden relative">
-            <!-- Slides will be injected here by JS -->
+<body class="min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-slate-800 tracking-tight">Future<span class="text-emerald-600">Move</span></span>
+                </div>
+                <div class="flex space-x-1 sm:space-x-8 items-center" id="nav-container">
+                    <button onclick="switchTab('overview')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-emerald-600 bg-emerald-50 transition-colors" data-tab="overview">РћРіР»СЏРґ</button>
+                    <button onclick="switchTab('electric')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 transition-colors" data-tab="electric">Р•Р»РµРєС‚СЂРѕС‚СЂР°РЅСЃРїРѕСЂС‚</button>
+                    <button onclick="switchTab('autonomous')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors" data-tab="autonomous">Р‘РµР·РїС–Р»РѕС‚РЅРёРєРё</button>
+                </div>
+            </div>
         </div>
-        <div class="buttons-container">
-            <button id="prev-btn" class="nav-button" disabled>?? Назад</button>
-            <button id="next-btn" class="nav-button">Вперед ??</button>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow container mx-auto px-4 py-6 max-w-6xl">
+
+        <!-- TAB 1: OVERVIEW -->
+        <div id="overview" class="tab-content active">
+            <header class="text-center mb-10">
+                <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">РњР°Р№Р±СѓС‚РЅС” РўСЂР°РЅСЃРїРѕСЂС‚Сѓ Р’Р¶Рµ РўСѓС‚</h1>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+                    Р¦РµР№ С–РЅС‚РµСЂР°РєС‚РёРІРЅРёР№ Р·РІС–С‚ РґРѕСЃР»С–РґР¶СѓС” РґРІС– СЂРµРІРѕР»СЋС†С–Р№РЅС– СЃРёР»Рё, С‰Рѕ Р·РјС–РЅСЋСЋС‚СЊ РЅР°С€ СЃРІС–С‚: РїРµСЂРµС…С–Рґ РЅР° 
+                    <span class="text-emerald-600 font-semibold">РµР»РµРєС‚СЂРёС‡РЅСѓ С‚СЏРіСѓ</span> С‚Р° РІРїСЂРѕРІР°РґР¶РµРЅРЅСЏ 
+                    <span class="text-indigo-600 font-semibold">С€С‚СѓС‡РЅРѕРіРѕ С–РЅС‚РµР»РµРєС‚Сѓ</span> Сѓ РєРµСЂСѓРІР°РЅРЅСЏ.
+                </p>
+            </header>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Electric Card -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer border-t-4 border-emerald-500" onclick="switchTab('electric')">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-2xl font-bold text-slate-800">Р•Р»РµРєС‚СЂРѕС‚СЂР°РЅСЃРїРѕСЂС‚</h2>
+                            <span class="text-3xl">вљЎ</span>
+                        </div>
+                        <p class="text-slate-600 mb-4">Р’С–Рґ РµР»РµРєС‚СЂРѕСЃР°РјРѕРєР°С‚С–РІ РґРѕ РєР°СЂ'С”СЂРЅРёС… СЃР°РјРѕСЃРєРёРґС–РІ. Р•РєРѕР»РѕРіС–С‡РЅР° Р°Р»СЊС‚РµСЂРЅР°С‚РёРІР°, С‰Рѕ Р·РјРµРЅС€СѓС” Р·Р°Р»РµР¶РЅС–СЃС‚СЊ РІС–Рґ РІРёРєРѕРїРЅРѕРіРѕ РїР°Р»РёРІР° С‚Р° РѕС‡РёС‰СѓС” РїРѕРІС–С‚СЂСЏ РјС–СЃС‚.</p>
+                        <ul class="space-y-2 text-sm text-slate-500">
+                            <li class="flex items-center"><span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>РќСѓР»СЊРѕРІС– РІРёРєРёРґРё РІ РјС–СЃС‚С–</li>
+                            <li class="flex items-center"><span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>РљРљР” РґРІРёРіСѓРЅР° 90%</li>
+                            <li class="flex items-center"><span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>Р•С„РµРєС‚РёРІРЅР° СѓС‚РёР»С–Р·Р°С†С–СЏ Р±Р°С‚Р°СЂРµР№</li>
+                        </ul>
+                        <div class="mt-6 text-emerald-600 font-semibold flex items-center">
+                            Р”РѕСЃР»С–РґРёС‚Рё С‚РµС…РЅРѕР»РѕРіС–С— <span class="ml-2">в†’</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Autonomous Card -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer border-t-4 border-indigo-500" onclick="switchTab('autonomous')">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-2xl font-bold text-slate-800">Р‘РµР·РїС–Р»РѕС‚РЅРёР№ РўСЂР°РЅСЃРїРѕСЂС‚</h2>
+                            <span class="text-3xl">рџ¤–</span>
+                        </div>
+                        <p class="text-slate-600 mb-4">РђРІС‚РѕРјРѕР±С–Р»С–, С‰Рѕ Р±Р°С‡Р°С‚СЊ Р±С–Р»СЊС€Рµ Р·Р° Р»СЋРґРёРЅСѓ. РџРѕС”РґРЅР°РЅРЅСЏ Lidar, СЂР°РґР°СЂС–РІ С‚Р° РЁР† РґР»СЏ СЃС‚РІРѕСЂРµРЅРЅСЏ Р±РµР·РїРµС‡РЅС–С€РѕРіРѕ РјР°Р№Р±СѓС‚РЅСЊРѕРіРѕ Р±РµР· Р°РІР°СЂС–Р№.</p>
+                        <ul class="space-y-2 text-sm text-slate-500">
+                            <li class="flex items-center"><span class="w-2 h-2 bg-indigo-400 rounded-full mr-2"></span>6 СЂС–РІРЅС–РІ Р°РІС‚РѕРЅРѕРјРЅРѕСЃС‚С–</li>
+                            <li class="flex items-center"><span class="w-2 h-2 bg-indigo-400 rounded-full mr-2"></span>РўРµС…РЅРѕР»РѕРіС–С— V2X С‚Р° Lidar</li>
+                            <li class="flex items-center"><span class="w-2 h-2 bg-indigo-400 rounded-full mr-2"></span>Р’РёСЂС–С€РµРЅРЅСЏ РµС‚РёС‡РЅРёС… РґРёР»РµРј</li>
+                        </ul>
+                        <div class="mt-6 text-indigo-600 font-semibold flex items-center">
+                            Р”С–Р·РЅР°С‚РёСЃСЏ РїСЂРѕ РЁР†-РІРѕРґС–С—РІ <span class="ml-2">в†’</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 bg-white rounded-xl shadow-sm p-6">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">РљР»СЋС‡РѕРІС– РІРёСЃРЅРѕРІРєРё Р·РІС–С‚Сѓ</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <div class="text-2xl font-bold text-emerald-600">90%</div>
+                        <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">РљРљР” Р•Р»РµРєС‚СЂРѕРґРІРёРіСѓРЅР°</div>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <div class="text-2xl font-bold text-indigo-600">SAE 0-5</div>
+                        <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">Р С–РІРЅС– РђРІС‚РѕРЅРѕРјРЅРѕСЃС‚С–</div>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <div class="text-2xl font-bold text-amber-500">Li-ion</div>
+                        <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">РћСЃРЅРѕРІРЅР° РўРµС…РЅРѕР»РѕРіС–СЏ</div>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <div class="text-2xl font-bold text-blue-500">V2X</div>
+                        <div class="text-xs text-slate-500 uppercase tracking-wide mt-1">Р†РЅС„СЂР°СЃС‚СЂСѓРєС‚СѓСЂР°</div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+
+        <!-- TAB 2: ELECTRIC TRANSPORT -->
+        <div id="electric" class="tab-content">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-slate-800 mb-2">Р•РєРѕСЃРёСЃС‚РµРјР° Р•Р»РµРєС‚СЂРѕС‚СЂР°РЅСЃРїРѕСЂС‚Сѓ</h2>
+                <p class="text-slate-600">
+                    Р•Р»РµРєС‚СЂРѕС‚СЂР°РЅСЃРїРѕСЂС‚ вЂ” С†Рµ РЅРµ Р»РёС€Рµ Tesla. Р¦Рµ С†С–Р»Р° РµРєРѕСЃРёСЃС‚РµРјР°, С‰Рѕ РѕС…РѕРїР»СЋС” РІСЃРµ: РІС–Рґ СЃР°РјРѕРєР°С‚Р°, РЅР° СЏРєРѕРјСѓ РІРё С—РґРµС‚Рµ РґРѕ РјРµС‚СЂРѕ, РґРѕ РІРµР»РёС‡РµР·РЅРёС… РєР°СЂ'С”СЂРЅРёС… СЃР°РјРѕСЃРєРёРґС–РІ. Р“РѕР»РѕРІРЅР° РјРµС‚Р° вЂ” СЃС‚Р°Р»РёР№ СЂРѕР·РІРёС‚РѕРє, Р·РЅРёР¶РµРЅРЅСЏ С€СѓРјСѓ С‚Р° РµРЅРµСЂРіРѕРµС„РµРєС‚РёРІРЅС–СЃС‚СЊ.
+                </p>
+            </div>
+
+            <!-- Section 1: Types Interactive Grid -->
+            <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+                <h3 class="text-lg font-bold text-slate-700 mb-4">Р’РёРґРё Р•Р»РµРєС‚СЂРѕС‚СЂР°РЅСЃРїРѕСЂС‚Сѓ</h3>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <button onclick="filterVehicles('all')" class="vehicle-filter active px-3 py-1 text-xs rounded-full border border-emerald-200 bg-emerald-100 text-emerald-800 hover:bg-emerald-200">Р’СЃС–</button>
+                    <button onclick="filterVehicles('public')" class="vehicle-filter px-3 py-1 text-xs rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100">Р“СЂРѕРјР°РґСЃСЊРєРёР№/РљРѕРјРµСЂС†С–Р№РЅРёР№</button>
+                    <button onclick="filterVehicles('personal')" class="vehicle-filter px-3 py-1 text-xs rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100">РћСЃРѕР±РёСЃС‚РёР№</button>
+                    <button onclick="filterVehicles('micro')" class="vehicle-filter px-3 py-1 text-xs rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100">Р—Р†Рњ (РњС–РєСЂРѕРјРѕР±С–Р»СЊРЅС–СЃС‚СЊ)</button>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="vehicle-grid">
+                    <!-- JS will populate this -->
+                </div>
+            </div>
+
+            <!-- Section 2: Efficiency & Ecology Charts -->
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <!-- Efficiency Chart -->
+                <div class="bg-white p-6 rounded-xl shadow-sm flex flex-col">
+                    <h3 class="text-lg font-bold text-slate-700 mb-2">Р•РЅРµСЂРіРѕРµС„РµРєС‚РёРІРЅС–СЃС‚СЊ: Р”Р’Р— РїСЂРѕС‚Рё Р•Р»РµРєС‚СЂРѕ</h3>
+                    <p class="text-sm text-slate-500 mb-4">РЎРєС–Р»СЊРєРё РµРЅРµСЂРіС–С— РїРµСЂРµС‚РІРѕСЂСЋС”С‚СЊСЃСЏ РЅР° СЂСѓС…?</p>
+                    <div class="chart-container">
+                        <canvas id="efficiencyChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-sm text-slate-500 italic bg-slate-50 p-2 rounded">
+                        Р•Р»РµРєС‚СЂРѕРґРІРёРіСѓРЅРё РїРµСЂРµС‚РІРѕСЂСЋСЋС‚СЊ РґРѕ 90% С…С–РјС–С‡РЅРѕС— РµРЅРµСЂРіС–С— РІ СЂСѓС…, С‚РѕРґС– СЏРє Р”Р’Р— РІС‚СЂР°С‡Р°СЋС‚СЊ Р±С–Р»СЊС€С–СЃС‚СЊ РµРЅРµСЂРіС–С— Сѓ РІРёРіР»СЏРґС– С‚РµРїР»Р°.
+                    </p>
+                </div>
+
+                <!-- Emissions Context -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="text-lg font-bold text-slate-700 mb-2">Р•РєРѕР»РѕРіС–С‡РЅС–СЃС‚СЊ: "Р’СѓРіР»РµС†РµРІРёР№ Р±РѕСЂРі"</h3>
+                    <div class="prose prose-sm text-slate-600">
+                        <p class="mb-3">
+                            Р’РёСЂРѕР±РЅРёС†С‚РІРѕ РµР»РµРєС‚СЂРѕРјРѕР±С–Р»СЏ СЃС‚РІРѕСЂСЋС” Р±С–Р»СЊС€Рµ РІРёРєРёРґС–РІ CO2 С‡РµСЂРµР· СЃРєР»Р°РґРЅРёР№ РїСЂРѕС†РµСЃ РІРёРіРѕС‚РѕРІР»РµРЅРЅСЏ Р±Р°С‚Р°СЂРµР№. Р¦Рµ РЅР°Р·РёРІР°С”С‚СЊСЃСЏ <strong>"РІСѓРіР»РµС†РµРІРёРј Р±РѕСЂРіРѕРј"</strong>.
+                        </p>
+                        <p class="mb-3">
+                            РћРґРЅР°Рє, Р·Р°РІРґСЏРєРё РІС–РґСЃСѓС‚РЅРѕСЃС‚С– РІРёС…Р»РѕРїС–РІ РїС–Рґ С‡Р°СЃ РµРєСЃРїР»СѓР°С‚Р°С†С–С—, РµР»РµРєС‚СЂРѕРјРѕР±С–Р»СЊ С€РІРёРґРєРѕ "РІС–РґРїСЂР°С†СЊРѕРІСѓС”" С†РµР№ Р±РѕСЂРі.
+                        </p>
+                        <div class="bg-emerald-50 p-3 rounded-lg border-l-4 border-emerald-500">
+                            <h4 class="font-bold text-emerald-800 text-xs uppercase mb-1">Р’РёСЃРЅРѕРІРѕРє Р·РІС–С‚Сѓ</h4>
+                            <p class="text-sm">Р’СѓРіР»РµС†РµРІРёР№ СЃР»С–Рґ РµР»РµРєС‚СЂРѕРјРѕР±С–Р»СЏ РїСЂРѕС‚СЏРіРѕРј РІСЃСЊРѕРіРѕ Р¶РёС‚С‚С”РІРѕРіРѕ С†РёРєР»Сѓ <strong>Р·Р°РІР¶РґРё РЅРёР¶С‡РёР№</strong>, РЅС–Р¶ Сѓ Р°РІС‚Рѕ Р· Р”Р’Р—, РЅР°РІС–С‚СЊ РїСЂРё Р·Р°СЂСЏРґС†С– РІС–Рґ "Р±СЂСѓРґРЅРѕС—" РјРµСЂРµР¶С–.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Battery Lifecycle -->
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-lg font-bold text-slate-700 mb-4">Р–РёС‚С‚С”РІРёР№ С†РёРєР» Р‘Р°С‚Р°СЂРµС—: Р’С–Рґ СЂСѓРґРё РґРѕ РїРµСЂРµСЂРѕР±РєРё</h3>
+                <p class="text-sm text-slate-500 mb-6">РќР°С‚РёСЃРЅС–С‚СЊ РЅР° РµС‚Р°РїРё, С‰РѕР± РґС–Р·РЅР°С‚РёСЃСЏ РїСЂРѕ С‚РµС…РЅРѕР»РѕРіС–С— РІРёРґРѕР±СѓС‚РєСѓ С‚Р° СѓС‚РёР»С–Р·Р°С†С–С—.</p>
+                
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 relative">
+                    <!-- Connecting line (desktop) -->
+                    <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-200 -z-0 transform -translate-y-1/2"></div>
+
+                    <!-- Step 1 -->
+                    <div class="relative z-10 flex flex-col items-center cursor-pointer group w-full md:w-1/4" onclick="showBatteryDetail('mining')">
+                        <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-xl border-4 border-white shadow-sm group-hover:scale-110 transition-transform">1</div>
+                        <span class="mt-2 font-medium text-slate-700 text-sm">РЎРёСЂРѕРІРёРЅР°</span>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="relative z-10 flex flex-col items-center cursor-pointer group w-full md:w-1/4" onclick="showBatteryDetail('production')">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xl border-4 border-white shadow-sm group-hover:scale-110 transition-transform">2</div>
+                        <span class="mt-2 font-medium text-slate-700 text-sm">Р’РёСЂРѕР±РЅРёС†С‚РІРѕ</span>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="relative z-10 flex flex-col items-center cursor-pointer group w-full md:w-1/4" onclick="showBatteryDetail('usage')">
+                        <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xl border-4 border-white shadow-sm group-hover:scale-110 transition-transform">3</div>
+                        <span class="mt-2 font-medium text-slate-700 text-sm">Р•РєСЃРїР»СѓР°С‚Р°С†С–СЏ</span>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="relative z-10 flex flex-col items-center cursor-pointer group w-full md:w-1/4" onclick="showBatteryDetail('recycling')">
+                        <div class="w-12 h-12 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xl border-4 border-white shadow-sm group-hover:scale-110 transition-transform">4</div>
+                        <span class="mt-2 font-medium text-slate-700 text-sm">РЈС‚РёР»С–Р·Р°С†С–СЏ</span>
+                    </div>
+                </div>
+
+                <div id="battery-detail-panel" class="mt-8 p-4 bg-slate-50 rounded-lg border border-slate-200 min-h-[120px]">
+                    <h4 id="bd-title" class="font-bold text-slate-800 mb-2">РћР±РµСЂС–С‚СЊ РµС‚Р°Рї РІРёС‰Рµ</h4>
+                    <p id="bd-text" class="text-sm text-slate-600">Р”С–Р·РЅР°Р№С‚РµСЃСЏ РґРµС‚Р°Р»С– РїСЂРѕ С‚РµС…РЅРѕР»РѕРіС–С‡РЅРёР№ РїСЂРѕС†РµСЃ СЃС‚РІРѕСЂРµРЅРЅСЏ С‚Р° РїРµСЂРµСЂРѕР±РєРё Li-ion Р°РєСѓРјСѓР»СЏС‚РѕСЂС–РІ.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: AUTONOMOUS TRANSPORT -->
+        <div id="autonomous" class="tab-content">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-slate-800 mb-2">Р•СЂР° Р‘РµР·РїС–Р»РѕС‚РЅРёРєС–РІ</h2>
+                <p class="text-slate-600">
+                    РЎР°РјРѕРєРµСЂРѕРІР°РЅРёР№ С‚СЂР°РЅСЃРїРѕСЂС‚ РІРёРєРѕСЂРёСЃС‚РѕРІСѓС” СЃРєР»Р°РґРЅРёР№ РєРѕРјРїР»РµРєСЃ РґР°С‚С‡РёРєС–РІ С‚Р° РЁР† РґР»СЏ РїСЂРёР№РЅСЏС‚С‚СЏ СЂС–С€РµРЅСЊ. РџРѕРєРё РјРё Р·РЅР°С…РѕРґРёРјРѕСЃСЏ РЅР° РµС‚Р°РїС– С‡Р°СЃС‚РєРѕРІРѕС— Р°РІС‚РѕРјР°С‚РёР·Р°С†С–С— (СЂС–РІРЅС– 2-3), С‚РµС…РЅРѕР»РѕРіС–СЏ РѕР±С–С†СЏС” РєР°СЂРґРёРЅР°Р»СЊРЅРѕ Р·РЅРёР·РёС‚Рё Р°РІР°СЂС–Р№РЅС–СЃС‚СЊ.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Interactive Car Sensor View -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="text-lg font-bold text-slate-700 mb-4">РЇРє Р±Р°С‡РёС‚СЊ Р°РІС‚РѕРјРѕР±С–Р»СЊ?</h3>
+                    <p class="text-sm text-slate-500 mb-6">РќР°РІРµРґС–С‚СЊ РєСѓСЂСЃРѕСЂ Р°Р±Рѕ РЅР°С‚РёСЃРЅС–С‚СЊ РЅР° РїСѓР»СЊСЃСѓСЋС‡С– С‚РѕС‡РєРё, С‰РѕР± Р·СЂРѕР·СѓРјС–С‚Рё РїСЂРёР·РЅР°С‡РµРЅРЅСЏ СЃРµРЅСЃРѕСЂС–РІ.</p>
+                    
+                    <div class="relative bg-slate-100 rounded-xl h-64 w-full flex items-center justify-center overflow-hidden border border-slate-200">
+                        <!-- Abstract Car Shape -->
+                        <div class="w-48 h-24 bg-indigo-500 rounded-lg relative shadow-lg flex items-center justify-center text-white font-bold opacity-90">
+                            РђРІС‚РѕРЅРѕРјРЅРµ РђРІС‚Рѕ
+                            <!-- Wheels -->
+                            <div class="absolute -bottom-4 left-6 w-10 h-10 bg-slate-800 rounded-full"></div>
+                            <div class="absolute -bottom-4 right-6 w-10 h-10 bg-slate-800 rounded-full"></div>
+                        </div>
+
+                        <!-- Sensors -->
+                        <!-- Lidar (Top) -->
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-16" onmouseover="showSensorInfo('lidar')" onclick="showSensorInfo('lidar')">
+                            <div class="w-6 h-6 bg-red-500 rounded-full sensor-point flex items-center justify-center text-white text-xs shadow-lg">L</div>
+                        </div>
+                        <!-- Camera (Front) -->
+                        <div class="absolute top-1/2 left-1/2 transform translate-x-20 -translate-y-8" onmouseover="showSensorInfo('camera')" onclick="showSensorInfo('camera')">
+                            <div class="w-6 h-6 bg-yellow-500 rounded-full sensor-point flex items-center justify-center text-white text-xs shadow-lg">C</div>
+                        </div>
+                        <!-- Radar (Front Bumper) -->
+                        <div class="absolute top-1/2 left-1/2 transform translate-x-24 translate-y-4" onmouseover="showSensorInfo('radar')" onclick="showSensorInfo('radar')">
+                            <div class="w-6 h-6 bg-blue-500 rounded-full sensor-point flex items-center justify-center text-white text-xs shadow-lg">R</div>
+                        </div>
+                        <!-- Ultrasonic (Side) -->
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-10 translate-y-8" onmouseover="showSensorInfo('ultra')" onclick="showSensorInfo('ultra')">
+                            <div class="w-6 h-6 bg-green-500 rounded-full sensor-point flex items-center justify-center text-white text-xs shadow-lg">U</div>
+                        </div>
+                    </div>
+
+                    <div id="sensor-info" class="mt-4 p-4 bg-indigo-50 border border-indigo-100 rounded-lg">
+                        <h4 class="font-bold text-indigo-900">РќР°РІРµРґС–С‚СЊ РЅР° СЃРµРЅСЃРѕСЂ</h4>
+                        <p class="text-sm text-indigo-700 mt-1">РћР±РµСЂС–С‚СЊ РµР»РµРјРµРЅС‚ РЅР° СЃС…РµРјС–, С‰РѕР± РґС–Р·РЅР°С‚РёСЃСЏ РїСЂРѕ Р№РѕРіРѕ С„СѓРЅРєС†С–СЋ.</p>
+                    </div>
+                </div>
+
+                <!-- Levels of Autonomy -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="text-lg font-bold text-slate-700 mb-4">Р С–РІРЅС– РђРІС‚РѕРЅРѕРјРЅРѕСЃС‚С– (SAE)</h3>
+                    <div class="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+                        <div class="level-card p-3 rounded border border-slate-200 hover:border-indigo-300 cursor-pointer transition-colors" onclick="highlightLevel(this)">
+                            <span class="text-xs font-bold bg-slate-200 px-2 py-0.5 rounded text-slate-700">Р С–РІРµРЅСЊ 0</span>
+                            <p class="text-sm text-slate-600 mt-1">РџРѕРІРЅРµ СЂСѓС‡РЅРµ РєРµСЂСѓРІР°РЅРЅСЏ.</p>
+                        </div>
+                        <div class="level-card p-3 rounded border border-slate-200 hover:border-indigo-300 cursor-pointer transition-colors" onclick="highlightLevel(this)">
+                            <span class="text-xs font-bold bg-slate-200 px-2 py-0.5 rounded text-slate-700">Р С–РІРµРЅСЊ 1</span>
+                            <p class="text-sm text-slate-600 mt-1">Р”РѕРїРѕРјРѕРіР° РІРѕРґС–СЋ (РљСЂСѓС—Р·-РєРѕРЅС‚СЂРѕР»СЊ).</p>
+                        </div>
+                        <div class="level-card p-3 rounded border-l-4 border-l-indigo-500 bg-indigo-50 border-slate-200 cursor-pointer transition-colors" onclick="highlightLevel(this)">
+                            <span class="text-xs font-bold bg-indigo-200 px-2 py-0.5 rounded text-indigo-800">Р С–РІРµРЅСЊ 2 (Р—Р°СЂР°Р·)</span>
+                            <p class="text-sm text-slate-600 mt-1">Р§Р°СЃС‚РєРѕРІР° Р°РІС‚РѕРјР°С‚РёР·Р°С†С–СЏ. Р’РѕРґС–Р№ РєРѕРЅС‚СЂРѕР»СЋС” РІСЃРµ.</p>
+                        </div>
+                        <div class="level-card p-3 rounded border border-slate-200 hover:border-indigo-300 cursor-pointer transition-colors" onclick="highlightLevel(this)">
+                            <span class="text-xs font-bold bg-slate-200 px-2 py-0.5 rounded text-slate-700">Р С–РІРµРЅСЊ 3</span>
+                            <p class="text-sm text-slate-600 mt-1">РЈРјРѕРІРЅР° Р°РІС‚РѕРјР°С‚РёР·Р°С†С–СЏ. Р’РѕРґС–Р№ РјР°С” Р±СѓС‚Рё РіРѕС‚РѕРІРёР№ РїРµСЂРµС…РѕРїРёС‚Рё РєРµСЂРјРѕ.</p>
+                        </div>
+                        <div class="level-card p-3 rounded border border-slate-200 hover:border-indigo-300 cursor-pointer transition-colors" onclick="highlightLevel(this)">
+                            <span class="text-xs font-bold bg-slate-200 px-2 py-0.5 rounded text-slate-700">Р С–РІРµРЅСЊ 4</span>
+                            <p class="text-sm text-slate-600 mt-1">Р’РёСЃРѕРєР° Р°РІС‚РѕРјР°С‚РёР·Р°С†С–СЏ. РђРІС‚Рѕ С—РґРµ СЃР°РјРµ РІ РїРµРІРЅРёС… Р·РѕРЅР°С….</p>
+                        </div>
+                        <div class="level-card p-3 rounded border border-slate-200 hover:border-indigo-300 cursor-pointer transition-colors" onclick="highlightLevel(this)">
+                            <span class="text-xs font-bold bg-slate-200 px-2 py-0.5 rounded text-slate-700">Р С–РІРµРЅСЊ 5</span>
+                            <p class="text-sm text-slate-600 mt-1">РџРѕРІРЅР° Р°РІС‚РѕРјР°С‚РёР·Р°С†С–СЏ. РљРµСЂРјРѕ РЅРµ РїРѕС‚СЂС–Р±РЅРµ.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ethics Section -->
+            <div class="mt-8 bg-white p-6 rounded-xl shadow-sm border-t-4 border-amber-400">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="md:w-1/2">
+                        <h3 class="text-lg font-bold text-slate-700 mb-2">Р•С‚РёРєР°: РџСЂРѕР±Р»РµРјР° Р’Р°РіРѕРЅРµС‚РєРё</h3>
+                        <p class="text-sm text-slate-600 mb-4">
+                            РќР°Р№СЃРєР»Р°РґРЅС–С€Рµ РїРёС‚Р°РЅРЅСЏ РґР»СЏ РЁР† вЂ” С†Рµ РЅРµ "СЏРє С—С…Р°С‚Рё", Р° "РєРѕРіРѕ СЂСЏС‚СѓРІР°С‚Рё" Сѓ РЅРµРјРёРЅСѓС‡С–Р№ Р°РІР°СЂС–С—. Р•С‚РёС‡РЅС– СЂРµРєРѕРјРµРЅРґР°С†С–С— СЃС…РёР»СЏСЋС‚СЊСЃСЏ РґРѕ РјС–РЅС–РјС–Р·Р°С†С–С— Р¶РµСЂС‚РІ, Р°Р»Рµ СЏРє С†Рµ Р·Р°РєРѕРґСѓРІР°С‚Рё?
+                        </p>
+                        <div class="bg-amber-50 p-4 rounded-lg">
+                            <p class="font-bold text-amber-800 mb-2">Р”РёР»РµРјР°:</p>
+                            <p class="text-sm text-amber-900 mb-3">РќР° РґРѕСЂРѕР·С– 5 РїС–С€РѕС…РѕРґС–РІ. Р’С–РґРјРѕРІР° РіР°Р»СЊРј. РџРѕРІРµСЂРЅСѓС‚Рё РІ СЃС‚С–РЅСѓ (Р·Р°РіРёРЅРµ РїР°СЃР°Р¶РёСЂ) С‡Рё С—С…Р°С‚Рё РїСЂСЏРјРѕ (Р·Р°РіРёРЅСѓС‚СЊ РїС–С€РѕС…РѕРґРё)?</p>
+                            <div class="flex gap-2">
+                                <button onclick="resolveEthics('utilitarian')" class="px-3 py-1 bg-white border border-amber-300 text-amber-800 text-xs rounded hover:bg-amber-100">РњС–РЅС–РјС–Р·СѓРІР°С‚Рё Р¶РµСЂС‚РІРё</button>
+                                <button onclick="resolveEthics('passenger')" class="px-3 py-1 bg-white border border-amber-300 text-amber-800 text-xs rounded hover:bg-amber-100">Р—Р°С…РёСЃС‚РёС‚Рё РїР°СЃР°Р¶РёСЂР°</button>
+                            </div>
+                            <p id="ethics-result" class="text-xs mt-3 text-slate-500 font-style: italic min-h-[40px]"></p>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <h3 class="text-lg font-bold text-slate-700 mb-2">Р†РЅС„СЂР°СЃС‚СЂСѓРєС‚СѓСЂР° С‚Р° Р‘РµР·РїРµРєР°</h3>
+                        <div class="space-y-2">
+                            <details class="group p-2 border border-slate-200 rounded cursor-pointer open:bg-slate-50">
+                                <summary class="text-sm font-semibold text-slate-700 list-none flex justify-between">
+                                    Р‘РµР·РїРµРєР° (РџР»СЋСЃРё С‚Р° РњС–РЅСѓСЃРё)
+                                    <span class="text-indigo-500 group-open:rotate-180 transition-transform">в–ј</span>
+                                </summary>
+                                <div class="text-xs text-slate-600 mt-2 pl-2 border-l-2 border-indigo-200">
+                                    <p class="mb-1"><strong>+</strong> РЈСЃСѓРЅРµРЅРЅСЏ 90% Р°РІР°СЂС–Р№ С‡РµСЂРµР· Р»СЋРґСЃСЊРєРёР№ С„Р°РєС‚РѕСЂ (РІС‚РѕРјР°, Р°Р»РєРѕРіРѕР»СЊ).</p>
+                                    <p><strong>-</strong> Р РёР·РёРє РєС–Р±РµСЂР°С‚Р°Рє С‚Р° РїРѕРјРёР»РѕРє Сѓ "РЅРµСЃС‚Р°РЅРґР°СЂС‚РЅРёС…" СЃРёС‚СѓР°С†С–СЏС… (Corner cases).</p>
+                                </div>
+                            </details>
+                            <details class="group p-2 border border-slate-200 rounded cursor-pointer open:bg-slate-50">
+                                <summary class="text-sm font-semibold text-slate-700 list-none flex justify-between">
+                                    РџРѕС‚СЂРµР±Рё Р†РЅС„СЂР°СЃС‚СЂСѓРєС‚СѓСЂРё
+                                    <span class="text-indigo-500 group-open:rotate-180 transition-transform">в–ј</span>
+                                </summary>
+                                <div class="text-xs text-slate-600 mt-2 pl-2 border-l-2 border-indigo-200">
+                                    <p>Р”Р»СЏ РїРѕРІРЅРѕС— Р°РІС‚РѕРЅРѕРјС–С— РїРѕС‚СЂС–Р±РЅС– V2I Р·РІ'СЏР·РѕРє (РґРѕСЂРѕРіР° "РіРѕРІРѕСЂРёС‚СЊ" Р· Р°РІС‚Рѕ), С–РґРµР°Р»СЊРЅР° СЂРѕР·РјС–С‚РєР°, HD-РєР°СЂС‚Рё С‚Р° РїСЂР°РІРѕРІРµ СЂРµРіСѓР»СЋРІР°РЅРЅСЏ.</p>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 py-6 mt-8">
+        <div class="container mx-auto px-4 text-center text-sm">
+            <p>&copy; 2025 Р—РІС–С‚ РїСЂРѕ РјР°Р№Р±СѓС‚РЅС” С‚СЂР°РЅСЃРїРѕСЂС‚Сѓ. РЎС‚РІРѕСЂРµРЅРѕ РЅР° РѕСЃРЅРѕРІС– РЅР°РґР°РЅРёС… РґР°РЅРёС….</p>
+        </div>
+    </footer>
 
     <script>
-        const slidesData = [
-            {
-                title: '?? ЕЛЕКТРОТРАНСПОРТ: ШВИДКИЙ ГАЙД ??',
-                content: `
-                    <p class="text-xl text-center font-bold mt-10">Просто: Транспорт, що приводиться в рух електродвигуном, живлення якого йде від акумуляторів або контактної мережі.</p>
-                    <h3 class="text-yellow-400">? Головна Мета:</h3>
-                    <p>Декарбонізація та максимальне зниження залежності від викопного палива у транспортному секторі.</p>
-                    <h3 class="text-yellow-400">?? Ключова Перевага:</h3>
-                    <ul>
-                        <li>Електродвигун має ККД до <strong>95%</strong> (майже вся енергія йде на рух).</li>
-                        <li>ДВЗ має ККД лише 20-40%.</li>
-                    </ul>
-                    <h3 class="text-yellow-400">?? Додатковий Бонус:</h3>
-                    <p>Миттєвий і максимальний крутний момент (Torque). Це забезпечує надшвидке прискорення, недосяжне для більшості бензинових авто!</p>
-                `
-            },
-            {
-                title: 'ЕКРАН 2/7: ТИПИ – Ти на чому? ??????',
-                content: `
-                    <h3>?? Персональний (ІТЗ) — Індивідуальні Транспортні Засоби</h3>
-                    <ul>
-                        <li>Електросамокати, Електровелосипеди.</li>
-                        <li>Моноколеса, Гіроскутери, Сігвеї.</li>
-                        <li>Скутери/Мотоцикли.</li>
-                    </ul>
-                    <p><strong>Суть:</strong> "Остання миля" та мікромобільність. Рішення для коротких відстаней у міських зонах.</p>
-                    
-                    <h3>?? Легковий — Еволюція Приводу</h3>
-                    <ul>
-                        <li><strong>EV (Електромобілі):</strong> 100% енергії від батареї.</li>
-                        <li><strong>PHEV (Підключаний Гібрид):</strong> Працює як EV (30-80 км), потім ДВЗ. <strong>Критично:</strong> вимагає регулярної зарядки від мережі.</li>
-                        <li><strong>HEV (Звичайний Гібрид):</strong> Не заряджається від мережі. Електродвигун лише допомагає ДВЗ.</li>
-                    </ul>
-                    
-                    <h3>?? Громадський / Вантажний</h3>
-                    <ul>
-                        <li><strong>Мережевий:</strong> Трамваї, Тролейбуси.</li>
-                        <li><strong>Автономний:</strong> Електробуси, Електровантажівки.</li>
-                        <li><strong>Спеціальний:</strong> Електричні судна та майбутні електричні літаки.</li>
-                    </ul>
-                `
-            },
-            {
-                title: 'ЕКРАН 3/7: Чому це НЕОБХІДНО? ?????? (Факти)',
-                content: `
-                    <h3>?? CO? та Забруднення</h3>
-                    <ul>
-                        <li><strong>Нульові</strong> прямі викиди.</li>
-                        <li>Ніяких оксидів азоту чи сажі у місті. Це рятує мільйони життів.</li>
-                    </ul>
-                    
-                    <h3>?? Економія та Обслуговування</h3>
-                    <ul>
-                        <li>Витрати на 100 км на електроенергії часто в <strong>3-5 разів нижчі</strong>.</li>
-                        <li>Немає масла, свічок, фільтрів, зчеплення. Менше рухомих частин = менше поломок.</li>
-                    </ul>
-                    
-                    <h3>?? Тиша та Безпека</h3>
-                    <ul>
-                        <li>Зниження шумового забруднення на вулицях.</li>
-                        <li>Перехід з імпортованої нафти на внутрішню генерацію електроенергії (сонячні, вітрові, АЕС).</li>
-                    </ul>
-                `
-            },
-            {
-                title: 'ЕКРАН 4/7: ЕКОЛОГІЧНІСТЬ – Критичний Погляд ??',
-                content: `
-                    <h3>?? 1. Етап Виробництва</h3>
-                    <p><strong>Челлендж:</strong> Виробництво батареї є найбільш "брудним" етапом життєвого циклу EV.</p>
-                    <p><strong>Результат:</strong> EV має більший вуглецевий слід, ніж ДВЗ-авто, <strong>до того, як він проїде перший кілометр</strong>.</p>
-                    
-                    <h3>?? 2. Етап Експлуатації</h3>
-                    <p><strong>Точка Зламу (Break-Even Point):</strong> Пробіг, після якого EV стає чистішим за ДВЗ. Зазвичай це 20,000 – 100,000 км.</p>
-                    <ul>
-                        <li><strong>"Чиста" мережа:</strong> (Норвегія, Франція) – EV є екологічною досконалістю.</li>
-                        <li><strong>"Брудна" мережа:</strong> (Вугільні ТЕС) – Викиди опосередковані, але EV все одно, як правило, на 20-50% чистіший за аналог.</li>
-                    </ul>
-                    <p class="text-green-400 font-bold mt-2">ВИСНОВОК: EV перемагає на дистанції! Перевага зростає з "зеленінням" енергетики. ??</p>
-                `
-            },
-            {
-                title: 'ЕКРАН 5/7: БАТАРЕЇ – Серце EV ????? (Технічні Деталі)',
-                content: `
-                    <h3>Хімічні типи</h3>
-                    <ul>
-                        <li><strong>Li-ion (Нікель-Кобальт-Марганець):</strong> Висока енергетична щільність = більший запас ходу. Потребує терморегулювання.</li>
-                        <li><strong>LFP (Літій-залізо-фосфатні):</strong> Нижча щільність, але <strong>більш безпечні, довговічні та дешевші</strong> (не використовують кобальт). Ідеальні для міських авто.</li>
-                    </ul>
-                    
-                    <h3>?? Процес Виробництва та Управління</h3>
-                    <ol class="list-decimal pl-6 text-sm text-gray-300">
-                        <li><strong>Створення Електродів:</strong> Сировина змішується у пасту (шлам), наноситься на фольгу та стискається (каландрування).</li>
-                        <li><strong>Герметизація:</strong> Електроди розділяються сепаратором, поміщаються в корпус та заливаються <strong>Електролітом</strong>.</li>
-                        <li><strong>BMS (Battery Management System):</strong> Це мізок батареї. Контролює температуру, рівномірність заряду (балансування) та захищає від перегріву/перезаряду.</li>
-                    </ol>
-                `
-            },
-            {
-                title: 'ЕКРАН 6/7: СИРОВИНА – Видобуток ?? (Виклики)',
-                content: `
-                    <h3>Літій</h3>
-                    <ul>
-                        <li><strong>Розсоли (Brine):</strong> Дешево, але <strong>високе водоспоживання</strong> (випаровування) і вплив на місцеві екосистеми (Чилі, Аргентина).</li>
-                        <li><strong>Руди (Hard Rock):</strong> Дорожче та більш традиційний гірничий вплив (Австралія).</li>
-                    </ul>
-                    
-                    <h3>Кобальт та Нікель</h3>
-                    <ul>
-                        <li><strong>Кобальт (ДРК):</strong> Більше 70% світових запасів. Головний етичний виклик — використання дитячої праці та погані умови праці.</li>
-                        <li><strong>Нікель:</strong> Використовується для підвищення енергетичної щільності (в NMC-хімії).</li>
-                    </ul>
-                    
-                    <p><strong>Графіт:</strong> Незамінний для анода. Видобувається або синтезується.</p>
-                `
-            },
-            {
-                title: 'ЕКРАН 7/7: УТИЛІЗАЦІЯ – Майбутнє Циклічної Економіки ??',
-                content: `
-                    <p>Утилізація – це не тільки екологія, а й економічна необхідність через зростання цін на сировину.</p>
-                    
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Технологія</th>
-                                <th>Суть Процесу</th>
-                                <th>Переваги та Недоліки</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>?? Пірометалургія</strong></td>
-                                <td>Спалювання батарей при ~1500°C. Метали Ni, Co, Cu відновлюються у сплав.</td>
-                                <td>**Плюси:** Проста. **Мінуси:** Втрата Літію, великі викиди CO?.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>?? Гідрометалургія</strong></td>
-                                <td>"Чорний порошок" розчиняється в кислотах. Метали витягуються хімічним осадженням.</td>
-                                <td>**Плюси:** **Високий вихід Літію (до 96%)!** **Мінуси:** Складний хім. процес, стічні води.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>?? Прямий Рециклінг</strong></td>
-                                <td>Відновлення катодних матеріалів без зміни їх хімічної структури.</td>
-                                <td>**Плюси:** Максимальна економія енергії. **Мінуси:** Вимагає чіткого сортування.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <p class="mt-4 text-center text-lg font-bold text-yellow-400">?? Бонус: "Друге Життя" (Second Life)!</p>
-                    <p class="text-center">Батареї з EV (втрата 20-30% ємності) ідеальні для <strong>стаціонарних сховищ енергії</strong> (наприклад, для сонячних панелей на будинку), подовжуючи їхній термін служби ще на 5-10 років! ????</p>
-                `
-            }
+        // --- Data Storage ---
+        const vehicles = [
+            { type: 'public', name: 'Р•Р»РµРєС‚СЂРѕР±СѓСЃ', icon: 'рџљЊ' },
+            { type: 'public', name: 'РњРµС‚СЂРѕ / РўСЂР°РјРІР°Р№', icon: 'рџљ‹' },
+            { type: 'public', name: 'РљР°СЂ\'С”СЂРЅРёР№ СЃР°РјРѕСЃРєРёРґ', icon: 'рџљ›' },
+            { type: 'personal', name: 'Р•Р»РµРєС‚СЂРѕРјРѕР±С–Р»СЊ (BEV)', icon: 'рџљ—' },
+            { type: 'personal', name: 'Р“С–Р±СЂРёРґ (PHEV)', icon: 'рџ”‹' },
+            { type: 'micro', name: 'Р•Р»РµРєС‚СЂРѕСЃР°РјРѕРєР°С‚', icon: 'рџ›ґ' },
+            { type: 'micro', name: 'РњРѕРЅРѕРєРѕР»РµСЃРѕ', icon: 'рџљІ' },
+            { type: 'micro', name: 'Р“С–СЂРѕСЃРєСѓС‚РµСЂ', icon: 'рџ›№' },
+            { type: 'special', name: 'Р”СЂРѕРЅ (Р‘РџР›Рђ)', icon: 'рџљЃ' },
+            { type: 'special', name: 'Р“РѕР»СЊС„-РєР°СЂ', icon: 'в›і' }
         ];
 
-        let currentSlideIndex = 0;
-        const slidesContainer = document.getElementById('slides-container');
-        const progressContainer = document.getElementById('progress-container');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
+        const batteryDetails = {
+            mining: { title: "1. Р’РёРґРѕР±СѓС‚РѕРє РЎРёСЂРѕРІРёРЅРё", text: "Р›С–С‚С–Р№ РІРёРґРѕР±СѓРІР°СЋС‚СЊ Р· СЃРѕР»СЏРЅРёС… РѕР·РµСЂ (РІРёРїР°СЂСЋРІР°РЅРЅСЏ) Р°Р±Рѕ С‚РІРµСЂРґРёС… РїРѕСЂС–Рґ. РљРѕР±Р°Р»СЊС‚ С‚Р° РЅС–РєРµР»СЊ вЂ” С€Р°С…С‚РЅРёРј РјРµС‚РѕРґРѕРј. Р¦Рµ РµРЅРµСЂРіРѕС”РјРЅРёР№ РїСЂРѕС†РµСЃ Р· РµРєРѕР»РѕРіС–С‡РЅРёРјРё СЂРёР·РёРєР°РјРё." },
+            production: { title: "2. Р’РёРіРѕС‚РѕРІР»РµРЅРЅСЏ", text: "РЎС‚РІРѕСЂРµРЅРЅСЏ РµР»РµРєС‚СЂРѕРґС–РІ (РєР°С‚РѕРґР° С‚Р° Р°РЅРѕРґР°), РЅР°РЅРµСЃРµРЅРЅСЏ РїРѕРєСЂРёС‚С‚СЏ РЅР° С„РѕР»СЊРіСѓ, Р·Р±С–СЂРєР° РєРѕРјС–СЂРєРё РІ 'СЃСѓС…РёС… РєС–РјРЅР°С‚Р°С…' С‚Р° Р·Р°РїРѕРІРЅРµРЅРЅСЏ РµР»РµРєС‚СЂРѕР»С–С‚РѕРј." },
+            usage: { title: "3. Р•РєСЃРїР»СѓР°С‚Р°С†С–СЏ", text: "РџРµСЂС–РѕРґ 'С‡РёСЃС‚РѕС—' СЂРѕР±РѕС‚Рё. Р’С–РґСЃСѓС‚РЅС–СЃС‚СЊ РІРёРєРёРґС–РІ. РњРѕР¶Р»РёРІС–СЃС‚СЊ РїРѕРІС‚РѕСЂРЅРѕРіРѕ РІРёРєРѕСЂРёСЃС‚Р°РЅРЅСЏ (Second Life) Сѓ СЃС‚Р°С†С–РѕРЅР°СЂРЅРёС… РЅР°РєРѕРїРёС‡СѓРІР°С‡Р°С… РїС–СЃР»СЏ Р·РЅРѕСЃСѓ РІ Р°РІС‚Рѕ." },
+            recycling: { title: "4. РЈС‚РёР»С–Р·Р°С†С–СЏ", text: "Р“С–РґСЂРѕРјРµС‚Р°Р»СѓСЂРіС–СЏ (СЂРѕР·С‡РёРЅРµРЅРЅСЏ РІ РєРёСЃР»РѕС‚Р°С…, РІРёСЃРѕРєРёР№ % РІС–РґРЅРѕРІР»РµРЅРЅСЏ) Р°Р±Рѕ РџС–СЂРѕРјРµС‚Р°Р»СѓСЂРіС–СЏ (СЃРїР°Р»СЋРІР°РЅРЅСЏ, РјРµРЅС€ РµС„РµРєС‚РёРІРЅРѕ). РљСЂРёС‚РёС‡РЅРѕ РІР°Р¶Р»РёРІРѕ РґР»СЏ РїРѕРІРµСЂРЅРµРЅРЅСЏ РјРµС‚Р°Р»С–РІ Сѓ С†РёРєР»." }
+        };
 
-        function createProgressBars() {
-            slidesData.forEach(() => {
-                const bar = document.createElement('div');
-                bar.className = 'progress-bar';
-                const segment = document.createElement('div');
-                segment.className = 'progress-segment';
-                bar.appendChild(segment);
-                progressContainer.appendChild(bar);
-            });
-        }
+        const sensorInfo = {
+            lidar: { title: "Lidar (Р›Р°Р·РµСЂ)", text: "РЎС‚РІРѕСЂСЋС” С‚РѕС‡РЅСѓ 3D-РєР°СЂС‚Сѓ СЃРІС–С‚Сѓ РЅР°РІРєРѕР»Рѕ, РІРёРјС–СЂСЋСЋС‡Рё С‡Р°СЃ РїРѕРІРµСЂРЅРµРЅРЅСЏ Р»Р°Р·РµСЂРЅРёС… РїСЂРѕРјРµРЅС–РІ. Р‘Р°С‡РёС‚СЊ С„РѕСЂРјСѓ РѕР±'С”РєС‚С–РІ." },
+            camera: { title: "РљР°РјРµСЂРё (Р—С–СЂ)", text: "Р РѕР·РїС–Р·РЅР°СЋС‚СЊ РєРѕР»СЊРѕСЂРё, РґРѕСЂРѕР¶РЅС– Р·РЅР°РєРё, СЂРѕР·РјС–С‚РєСѓ С‚Р° СЃРёРіРЅР°Р»Рё СЃРІС–С‚Р»РѕС„РѕСЂС–РІ. Р„РґРёРЅРёР№ СЃРµРЅСЃРѕСЂ, С‰Рѕ 'С‡РёС‚Р°С”' РІС–Р·СѓР°Р»СЊРЅСѓ С–РЅС„РѕСЂРјР°С†С–СЋ." },
+            radar: { title: "Р Р°РґР°СЂ", text: "Р’РёРєРѕСЂРёСЃС‚РѕРІСѓС” СЂР°РґС–РѕС…РІРёР»С–. Р’РёР·РЅР°С‡Р°С” С€РІРёРґРєС–СЃС‚СЊ С‚Р° РґРёСЃС‚Р°РЅС†С–СЋ. РџСЂР°С†СЋС” РєСЂР°С‰Рµ Р·Р° С–РЅС€РёС… Сѓ РґРѕС‰ С‚Р° С‚СѓРјР°РЅ." },
+            ultra: { title: "РЈР»СЊС‚СЂР°Р·РІСѓРє", text: "РЎРµРЅСЃРѕСЂРё Р±Р»РёР·СЊРєРѕС— РґС–С—. Р†РґРµР°Р»СЊРЅС– РґР»СЏ РїР°СЂРєСѓРІР°РЅРЅСЏ С‚Р° РІРёСЏРІР»РµРЅРЅСЏ РѕР±'С”РєС‚С–РІ Сѓ СЃР»С–РїРёС… Р·РѕРЅР°С… РїРѕСЂСѓС‡ Р· Р°РІС‚Рѕ." }
+        };
 
-        function updateProgress() {
-            const bars = progressContainer.querySelectorAll('.progress-segment');
-            bars.forEach((segment, index) => {
-                if (index < currentSlideIndex) {
-                    segment.style.width = '100%';
-                } else if (index === currentSlideIndex) {
-                    // Current slide is 50% finished for visual effect
-                    segment.style.width = '50%';
+        // --- Navigation Logic ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            // Update buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.dataset.tab === tabId) {
+                    btn.classList.remove('text-slate-500', 'hover:bg-emerald-50');
+                    btn.classList.add('text-emerald-600', 'bg-emerald-50');
                 } else {
-                    segment.style.width = '0';
+                    btn.classList.add('text-slate-500');
+                    btn.classList.remove('text-emerald-600', 'bg-emerald-50');
                 }
             });
-        }
 
-        function renderSlides() {
-            slidesContainer.innerHTML = '';
-            slidesData.forEach((slide, index) => {
-                const slideEl = document.createElement('div');
-                slideEl.className = 'slide ' + (index === currentSlideIndex ? 'active' : '');
-                slideEl.id = `slide-${index}`;
-                
-                // Content structure
-                const contentWrapper = document.createElement('div');
-                contentWrapper.className = 'slide-content';
-
-                const h2 = document.createElement('h2');
-                h2.innerHTML = slide.title;
-                contentWrapper.appendChild(h2);
-
-                const body = document.createElement('div');
-                body.innerHTML = slide.content;
-                contentWrapper.appendChild(body);
-
-                slideEl.appendChild(contentWrapper);
-                slidesContainer.appendChild(slideEl);
-            });
-            updateButtons();
-            updateProgress();
-        }
-
-        function updateButtons() {
-            prevBtn.disabled = currentSlideIndex === 0;
-            nextBtn.disabled = currentSlideIndex === slidesData.length - 1;
-        }
-
-        function changeSlide(direction) {
-            const newIndex = currentSlideIndex + direction;
-            if (newIndex >= 0 && newIndex < slidesData.length) {
-                const oldSlide = document.getElementById(`slide-${currentSlideIndex}`);
-                const newSlide = document.getElementById(`slide-${newIndex}`);
-
-                // Hide old slide
-                oldSlide.style.transform = `translateY(${direction < 0 ? '100%' : '-100%'})`;
-                oldSlide.classList.remove('active');
-
-                // Prepare new slide position
-                newSlide.style.transform = `translateY(${direction < 0 ? '-100%' : '100%'})`;
-                newSlide.classList.add('active');
-                
-                // Animate new slide in
-                // Using a small timeout to ensure the transition takes effect
-                setTimeout(() => {
-                    newSlide.style.transform = 'translateY(0)';
-                    newSlide.style.opacity = '1';
-                    oldSlide.style.opacity = '0';
-                    oldSlide.style.transform = `translateY(${direction < 0 ? '100%' : '-100%'})`;
-                }, 50);
-
-                currentSlideIndex = newIndex;
-                
-                updateButtons();
-                updateProgress();
+            // Initialize grid if Electric tab
+            if (tabId === 'electric') {
+                filterVehicles('all');
+                renderCharts(); // Ensure charts render correctly after tab becomes visible
             }
         }
-        
-        // Initial setup
-        window.onload = () => {
-            createProgressBars();
-            renderSlides();
-            
-            // Set initial position correctly after rendering
-            slidesContainer.querySelector('.slide.active').style.transform = 'translateY(0)';
-            slidesContainer.querySelector('.slide.active').style.opacity = '1';
 
-            prevBtn.addEventListener('click', () => changeSlide(-1));
-            nextBtn.addEventListener('click', () => changeSlide(1));
+        // --- Electric Transport Logic ---
+        function filterVehicles(category) {
+            const grid = document.getElementById('vehicle-grid');
+            grid.innerHTML = '';
+            
+            // Update filter buttons styles
+            document.querySelectorAll('.vehicle-filter').forEach(btn => {
+                if ((category === 'all' && btn.innerText === 'Р’СЃС–') || 
+                    (category === 'public' && btn.innerText.includes('Р“СЂРѕРјР°РґСЃСЊРєРёР№')) ||
+                    (category === 'personal' && btn.innerText.includes('РћСЃРѕР±РёСЃС‚РёР№')) ||
+                    (category === 'micro' && btn.innerText.includes('Р—Р†Рњ'))) {
+                    btn.classList.add('bg-emerald-100', 'text-emerald-800', 'border-emerald-200');
+                    btn.classList.remove('text-slate-600', 'border-slate-200');
+                } else {
+                    btn.classList.remove('bg-emerald-100', 'text-emerald-800', 'border-emerald-200');
+                    btn.classList.add('text-slate-600', 'border-slate-200');
+                }
+            });
+
+            const filtered = category === 'all' ? vehicles : vehicles.filter(v => v.type === category);
+            
+            filtered.forEach(v => {
+                const card = document.createElement('div');
+                card.className = 'bg-slate-50 p-4 rounded-lg flex flex-col items-center justify-center text-center border border-slate-100 hover:border-emerald-300 transition-colors';
+                card.innerHTML = `<div class="text-3xl mb-2">${v.icon}</div><div class="text-sm font-medium text-slate-700">${v.name}</div>`;
+                grid.appendChild(card);
+            });
+        }
+
+        function showBatteryDetail(stage) {
+            const detail = batteryDetails[stage];
+            const titleEl = document.getElementById('bd-title');
+            const textEl = document.getElementById('bd-text');
+            
+            // Simple fade effect
+            textEl.style.opacity = 0;
+            setTimeout(() => {
+                titleEl.textContent = detail.title;
+                textEl.textContent = detail.text;
+                textEl.style.opacity = 1;
+            }, 200);
+        }
+
+        // --- Autonomous Transport Logic ---
+        function showSensorInfo(sensor) {
+            const info = sensorInfo[sensor];
+            const container = document.getElementById('sensor-info');
+            container.innerHTML = `<h4 class="font-bold text-indigo-900">${info.title}</h4><p class="text-sm text-indigo-700 mt-1">${info.text}</p>`;
+        }
+
+        function highlightLevel(element) {
+            // Remove highlighting from others
+            document.querySelectorAll('.level-card').forEach(el => {
+                el.classList.remove('bg-indigo-50', 'border-l-4', 'border-l-indigo-500');
+                el.classList.add('border-slate-200');
+            });
+            // Add to clicked
+            element.classList.remove('border-slate-200');
+            element.classList.add('bg-indigo-50', 'border-l-4', 'border-l-indigo-500');
+        }
+
+        function resolveEthics(choice) {
+            const resBox = document.getElementById('ethics-result');
+            if (choice === 'utilitarian') {
+                resBox.innerHTML = "<strong>Р’РёР±С–СЂ СѓС‚РёР»С–С‚Р°СЂРёР·РјСѓ:</strong> РЁР† Р¶РµСЂС‚РІСѓС” РїР°СЃР°Р¶РёСЂРѕРј Р·Р°СЂР°РґРё РїРѕСЂСЏС‚СѓРЅРєСѓ 5 Р¶РёС‚С‚С–РІ. Р¦Рµ РјС–РЅС–РјС–Р·СѓС” Р·Р°РіР°Р»СЊРЅСѓ С€РєРѕРґСѓ, Р°Р»Рµ С…С‚Рѕ РєСѓРїРёС‚СЊ Р°РІС‚Рѕ, С‰Рѕ РјРѕР¶Рµ РІР±РёС‚Рё РІР»Р°СЃРЅРёРєР°?";
+            } else {
+                resBox.innerHTML = "<strong>Р—Р°С…РёСЃС‚ РїР°СЃР°Р¶РёСЂР°:</strong> РђРІС‚Рѕ СЂСЏС‚СѓС” РІР°СЃ, Р°Р»Рµ РіРёРЅРµ 5 Р»СЋРґРµР№. Р¦Рµ РїСЂРѕРґР°С”С‚СЊСЃСЏ РєСЂР°С‰Рµ, Р°Р»Рµ СЃСѓСЃРїС–Р»СЊСЃС‚РІРѕ РјРѕР¶Рµ РЅРµ РїСЂРёР№РЅСЏС‚Рё С‚Р°РєРёС… РµРіРѕС—СЃС‚РёС‡РЅРёС… РјР°С€РёРЅ.";
+            }
+        }
+
+        // --- Charts Initialization ---
+        let chartsInitialized = false;
+
+        function renderCharts() {
+            if (chartsInitialized) return;
+            
+            const ctxEfficiency = document.getElementById('efficiencyChart').getContext('2d');
+            
+            new Chart(ctxEfficiency, {
+                type: 'bar',
+                data: {
+                    labels: ['Р”РІРёРіСѓРЅ Р’РЅСѓС‚СЂС–С€РЅСЊРѕРіРѕ Р—РіРѕСЂСЏРЅРЅСЏ (Р”Р’Р—)', 'Р•Р»РµРєС‚СЂРѕРґРІРёРіСѓРЅ (EV)'],
+                    datasets: [{
+                        label: 'РљРѕРµС„С–С†С–С”РЅС‚ РљРѕСЂРёСЃРЅРѕС— Р”С–С— (%)',
+                        data: [30, 90],
+                        backgroundColor: ['#94a3b8', '#10b981'],
+                        borderRadius: 6,
+                        barThickness: 50
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw + '% РµРЅРµСЂРіС–С— Р№РґРµ РЅР° СЂСѓС…';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: { display: true, text: 'Р•С„РµРєС‚РёРІРЅС–СЃС‚СЊ (%)' }
+                        }
+                    }
+                }
+            });
+
+            chartsInitialized = true;
+        }
+
+        // --- Init ---
+        // Initialize filtered grid on load
+        window.onload = function() {
+            filterVehicles('all');
         };
+
     </script>
 </body>
 </html>
